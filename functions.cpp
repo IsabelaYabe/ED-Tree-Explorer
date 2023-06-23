@@ -14,9 +14,10 @@ using std::cin;
 */
 struct Node* newNode(int iData)
 {
-
+    // memory allocation
     struct Node* newNode = (struct Node*) malloc(sizeof(struct Node));
 
+    // initialization
     newNode->iData = iData;
     newNode->ptrLeft = nullptr;
     newNode->ptrRight = nullptr;
@@ -36,16 +37,102 @@ void insertNode(struct Node** ptrRoot, int iData)
 {
     if (*ptrRoot == nullptr)
     {
+        // if the tree is empty, the inserted node becomes the root
         (*ptrRoot) = newNode(iData);
     }
     else if (iData <= (*ptrRoot)->iData)
     {
+        // if the inserted value is less than the root, insert it in the left subtree
         insertNode(&((*ptrRoot)->ptrLeft), iData);
     }
     else
     {
+        // if the inserted value is greater than the root, insert it in the right subtree
         insertNode(&((*ptrRoot)->ptrRight), iData);
     }
+}
+
+/**
+ * Finds the smallest leaf of a tree.
+ * 
+ * @param ptrRoot A pointer to the root node of the tree.
+ * 
+ * @return A pointer to the smallest leaf of the tree.
+*/
+struct Node* getSmallestChild(struct Node* ptrRoot)
+{
+    // if the tree is empty, return nullptr
+    if (ptrRoot == nullptr) return ptrRoot;
+    else
+    {
+        // traverse the left subtree until the smallest leaf is found
+        while (ptrRoot->ptrLeft != nullptr) ptrRoot = ptrRoot->ptrLeft;
+
+        return ptrRoot;
+    }
+}
+
+/**
+ * Deletes a node with the given data from the tree.
+ * 
+ * @param ptrRoot A pointer to the root node of the tree.
+ * @param iData The data to be deleted from the tree.
+ * 
+ * @return A pointer to the root node of the modified tree.
+*/
+struct Node* deleteNode(struct Node* ptrRoot, int iData)
+{
+    // if the tree is empty, return nullptr
+    if (ptrRoot == nullptr) return nullptr;
+
+    // if the tree is not empty, traverse it
+    else if (iData < ptrRoot->iData) ptrRoot->ptrLeft = deleteNode(ptrRoot->ptrLeft, iData);
+    else if (iData > ptrRoot->iData) ptrRoot->ptrRight = deleteNode(ptrRoot->ptrRight, iData);
+
+    // if the node to be deleted is found
+    else if (iData == ptrRoot->iData)
+    {  
+        struct Node* ptrTemp = nullptr;
+
+        // if the node has no left child, replace it with its right child
+        if (ptrRoot->ptrLeft == nullptr)
+        {
+            ptrTemp = ptrRoot->ptrRight;
+
+            free(ptrRoot);
+            
+            return ptrTemp;
+        }
+
+        // if the node has no right child, replace it with its left child
+        else if (ptrRoot->ptrRight == nullptr)
+        {
+            ptrTemp = ptrRoot->ptrLeft;
+
+            free(ptrRoot);
+            
+            return ptrTemp;
+        }
+
+        // if the node has two children, replace it with the smallest child of its right subtree
+        else
+        {
+            // get the smallest child of the right subtree
+            ptrTemp = getSmallestChild(ptrRoot->ptrRight);
+
+            // copy the left subtree of the node to be deleted
+            ptrTemp->ptrLeft = ptrRoot->ptrLeft;
+
+            // copy the right subtree, deleting the child from its original position
+            ptrTemp->ptrRight = deleteNode(ptrTemp->ptrRight, ptrTemp->iData);
+
+            free(ptrRoot);
+
+            return ptrTemp;
+        }
+    }
+
+    return ptrRoot;
 }
 
 /**
@@ -57,7 +144,11 @@ void insertNode(struct Node** ptrRoot, int iData)
 */
 void traversePreOrder(struct Node* ptrStartingNode)
 {
-    if (ptrStartingNode != nullptr)
+    // if the tree is empty, return
+    if (ptrStartingNode == nullptr) return;
+
+    // if the tree is not empty, print current node and traverse its subtrees
+    else
     {
         cout << " " << ptrStartingNode->iData;
         traversePreOrder(ptrStartingNode->ptrLeft);
@@ -75,7 +166,10 @@ void traversePreOrder(struct Node* ptrStartingNode)
 */
 struct Node* searchNode(struct Node* ptrStartingNode, int iData)
 {
+    // if the tree is empty, return nullptr
     if (ptrStartingNode == nullptr) return nullptr;
+
+    // if the tree is not empty, traverse it, searching along the way
     else if (iData == ptrStartingNode->iData) return ptrStartingNode;
     else if (iData < ptrStartingNode->iData) return searchNode(ptrStartingNode->ptrLeft, iData);
     else return searchNode(ptrStartingNode->ptrRight, iData);
@@ -90,8 +184,13 @@ struct Node* searchNode(struct Node* ptrStartingNode, int iData)
 */
 int getHeight(struct Node* ptrRoot)
 {
+    // if the tree is empty, return 0
     if (ptrRoot == nullptr) return 0;
+
+    // if the tree has no children, return 1
     else if (ptrRoot->ptrLeft == nullptr && ptrRoot->ptrRight == nullptr) return 1;
+
+    // if the tree has children, return 1 + the height of the tallest subtree
     else return (1 + std::max(getHeight(ptrRoot->ptrLeft), getHeight(ptrRoot->ptrRight)));
 }
 
@@ -104,7 +203,10 @@ int getHeight(struct Node* ptrRoot)
 */
 int getNumberOfNodes(struct Node* ptrRoot)
 {
+    // if the tree is empty, return 0
     if (ptrRoot == nullptr) return 0;
+
+    // if the tree is not empty, return 1 + the number of nodes in its subtrees
     else return (1 + getNumberOfNodes(ptrRoot->ptrLeft) + getNumberOfNodes(ptrRoot->ptrRight));
 }
 
@@ -119,9 +221,16 @@ int getNumberOfNodes(struct Node* ptrRoot)
 */
 bool isPerfect(struct Node* ptrRoot, int iTreeHeight, int iBranchHeight)
 {
+    // if the tree is empty, return true
     if (ptrRoot == nullptr) return true;
+
+    // if the tree has no children, return true if the branch height is equal to the tree height
     else if (ptrRoot->ptrLeft == nullptr && ptrRoot->ptrRight == nullptr) return (iTreeHeight == iBranchHeight);
+
+    // if the tree has only one child, return false
     else if (ptrRoot->ptrLeft == nullptr || ptrRoot->ptrRight == nullptr) return false;
+
+    // if the tree has two children, return true if both subtrees are perfect
     else return (isPerfect(ptrRoot->ptrLeft, iTreeHeight, iBranchHeight + 1) && isPerfect(ptrRoot->ptrRight, iTreeHeight, iBranchHeight + 1));
 }
 
@@ -136,9 +245,18 @@ bool isPerfect(struct Node* ptrRoot, int iTreeHeight, int iBranchHeight)
 */
 bool isComplete(struct Node* ptrRoot, int iTreeHeight, int iBranchHeight)
 {
+    // if the tree is empty, return true
     if (ptrRoot == nullptr) return true;
-    else if (ptrRoot->ptrLeft == nullptr && ptrRoot->ptrRight == nullptr) return (iTreeHeight == iBranchHeight);
+
+    // if the tree has no children, return true if we are on the max depth or one level above it
+    else if (ptrRoot->ptrLeft == nullptr && ptrRoot->ptrRight == nullptr) return (iTreeHeight == iBranchHeight || iTreeHeight == iBranchHeight + 1);
+
+    // if the tree has a right child but no left child, return false
     else if (ptrRoot->ptrLeft == nullptr && ptrRoot->ptrRight != nullptr) return false;
-    else if (ptrRoot->ptrLeft != nullptr && ptrRoot->ptrRight == nullptr) return isComplete(ptrRoot->ptrLeft, iTreeHeight, iBranchHeight + 1);
+
+    // if the tree has a left child but no right child, check if the left subtree is complete and if we are just above the max depth
+    else if (ptrRoot->ptrLeft != nullptr && ptrRoot->ptrRight == nullptr) return (isComplete(ptrRoot->ptrLeft, iTreeHeight, iBranchHeight + 1) && (iTreeHeight == iBranchHeight + 1));
+
+    // if the tree has two children, return true if both subtrees are complete
     else return (isComplete(ptrRoot->ptrLeft, iTreeHeight, iBranchHeight + 1) && isComplete(ptrRoot->ptrRight, iTreeHeight, iBranchHeight + 1));
 }

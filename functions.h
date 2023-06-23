@@ -11,6 +11,10 @@ struct Node* newNode(int);
 
 void insertNode(struct Node**, int);
 
+struct Node* getSmallestChild(struct Node*);
+
+struct Node* deleteNode(struct Node*, int);
+
 void traversePreOrder(struct Node*);
 
 struct Node* searchNode(struct Node*, int);
