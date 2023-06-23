@@ -12,3 +12,13 @@ struct Node* newNode(int);
 void insertNode(struct Node**, int);
 
 void traversePreOrder(struct Node*);
+
+struct Node* searchNode(struct Node*, int);
+
+int getHeight(struct Node*);
+
+int getNumberOfNodes(struct Node*);
+
+bool isPerfect(struct Node*, int, int);
+
+bool isComplete(struct Node*, int, int);
