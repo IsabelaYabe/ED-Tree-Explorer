@@ -26,6 +26,27 @@ struct Node* newNode(int iData)
 };
 
 /**
+ * Traverses the tree in pre-order, printing it along the way.
+ * 
+ * @param ptrStartingNode A pointer to the starting node of the tree.
+ * 
+ * @return Void.
+*/
+void traversePreOrder(struct Node* ptrStartingNode)
+{
+    // if the tree is empty, return
+    if (ptrStartingNode == nullptr) return;
+
+    // if the tree is not empty, print current node and traverse its subtrees
+    else
+    {
+        cout << ptrStartingNode->iData << "\t";
+        traversePreOrder(ptrStartingNode->ptrLeft);
+        traversePreOrder(ptrStartingNode->ptrRight);
+    }
+}
+
+/**
  * Inserts a new node with the given data into the tree.
  * 
  * @param ptrRoot A pointer to the root node of the tree.
@@ -92,68 +113,48 @@ struct Node* deleteNode(struct Node* ptrRoot, int iData)
     // if the node to be deleted is found
     else if (iData == ptrRoot->iData)
     {  
-        struct Node* ptrTemp = nullptr;
+        struct Node* ptrNewRoot = nullptr;
 
         // if the node has no left child, replace it with its right child
         if (ptrRoot->ptrLeft == nullptr)
         {
-            ptrTemp = ptrRoot->ptrRight;
+            ptrNewRoot = ptrRoot->ptrRight;
 
             free(ptrRoot);
             
-            return ptrTemp;
+            return ptrNewRoot;
         }
 
         // if the node has no right child, replace it with its left child
         else if (ptrRoot->ptrRight == nullptr)
         {
-            ptrTemp = ptrRoot->ptrLeft;
+            ptrNewRoot = ptrRoot->ptrLeft;
 
             free(ptrRoot);
             
-            return ptrTemp;
+            return ptrNewRoot;
         }
 
         // if the node has two children, replace it with the smallest child of its right subtree
         else
         {
             // get the smallest child of the right subtree
-            ptrTemp = getSmallestChild(ptrRoot->ptrRight);
+            struct Node* ptrSuccessor = getSmallestChild(ptrRoot->ptrRight);
+            struct Node* ptrNewRoot = newNode(ptrSuccessor->iData);
 
             // copy the left subtree of the node to be deleted
-            ptrTemp->ptrLeft = ptrRoot->ptrLeft;
+            ptrNewRoot->ptrLeft = ptrRoot->ptrLeft;
 
             // copy the right subtree, deleting the child from its original position
-            ptrTemp->ptrRight = deleteNode(ptrTemp->ptrRight, ptrTemp->iData);
+            ptrNewRoot->ptrRight = deleteNode(ptrRoot->ptrRight, ptrNewRoot->iData);
 
             free(ptrRoot);
 
-            return ptrTemp;
+            return ptrNewRoot;
         }
     }
 
     return ptrRoot;
-}
-
-/**
- * Traverses the tree in pre-order, printing it along the way.
- * 
- * @param ptrStartingNode A pointer to the starting node of the tree.
- * 
- * @return Void.
-*/
-void traversePreOrder(struct Node* ptrStartingNode)
-{
-    // if the tree is empty, return
-    if (ptrStartingNode == nullptr) return;
-
-    // if the tree is not empty, print current node and traverse its subtrees
-    else
-    {
-        cout << " " << ptrStartingNode->iData;
-        traversePreOrder(ptrStartingNode->ptrLeft);
-        traversePreOrder(ptrStartingNode->ptrRight);
-    }
 }
 
 /**
@@ -257,6 +258,9 @@ bool isComplete(struct Node* ptrRoot, int iTreeHeight, int iBranchHeight)
     // if the tree has a left child but no right child, check if the left subtree is complete and if we are just above the max depth
     else if (ptrRoot->ptrLeft != nullptr && ptrRoot->ptrRight == nullptr) return (isComplete(ptrRoot->ptrLeft, iTreeHeight, iBranchHeight + 1) && (iTreeHeight == iBranchHeight + 1));
 
-    // if the tree has two children, return true if both subtrees are complete
-    else return (isComplete(ptrRoot->ptrLeft, iTreeHeight, iBranchHeight + 1) && isComplete(ptrRoot->ptrRight, iTreeHeight, iBranchHeight + 1));
+    // if the tree has two children, there are two possibilities:
+    // 1. the left subtree is perfect and the right subtree is complete
+    // 2. the left subtree is complete and the right subtree is perfect, but is one level shallower than the left subtree
+    else return ((isPerfect(ptrRoot->ptrLeft, iTreeHeight, iBranchHeight + 1) && isComplete(ptrRoot->ptrRight, iTreeHeight, iBranchHeight + 1)) ||
+                 (isComplete(ptrRoot->ptrLeft, iTreeHeight, iBranchHeight + 1) && isPerfect(ptrRoot->ptrRight, iTreeHeight, iBranchHeight + 2)));
 }

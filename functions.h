@@ -9,13 +9,13 @@ struct Node
 
 struct Node* newNode(int);
 
+void traversePreOrder(struct Node*);
+
 void insertNode(struct Node**, int);
 
 struct Node* getSmallestChild(struct Node*);
 
 struct Node* deleteNode(struct Node*, int);
-
-void traversePreOrder(struct Node*);
 
 struct Node* searchNode(struct Node*, int);
 
