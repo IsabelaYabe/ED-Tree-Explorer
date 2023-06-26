@@ -1,6 +1,4 @@
 #pragma once
-#include <iostream>
-using namespace std;
 
 struct Node
 {
@@ -9,12 +7,7 @@ struct Node
     struct Node* ptrRight;
 };
 
-struct Node* newNode(int);
-void traversePreOrder(struct Node*);
-void insertNode(struct Node**, int);
-
 // Useful variables
-
 const string strSeparator = "======================================================================";
 const string strOptions[16] = {
     "Quit the program.",
@@ -35,6 +28,27 @@ const string strOptions[16] = {
     "Display tests from driver_code.cpp"
 };
 
+// Base functions
+struct Node* newNode(int);
+
+void traversePreOrder(struct Node*);
+
+void insertNode(struct Node**, int);
+
+struct Node* getSmallestChild(struct Node*);
+
+struct Node* deleteNode(struct Node*, int);
+
+struct Node* searchNode(struct Node*, int);
+
+int getHeight(struct Node*);
+
+int getNumberOfNodes(struct Node*);
+
+bool isPerfect(struct Node*, int, int);
+
+bool isComplete(struct Node*, int, int);
+
 // Loop
 void loop();
 
@@ -43,8 +57,10 @@ void printMenu();
 
 // Case 2
 string askFileName();
+
 struct Node* buildFromFile(string);
 
 // Case 3
 bool isNumeric(const string&);
+
 struct Node* buildFromUser();
