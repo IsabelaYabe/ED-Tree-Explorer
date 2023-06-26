@@ -1,3 +1,4 @@
+#pragma once
 #include <iostream>
 using namespace std;
 
@@ -9,13 +10,13 @@ struct Node
 };
 
 struct Node* newNode(int);
+void traversePreOrder(struct Node*);
 void insertNode(struct Node**, int);
-
 
 // Useful variables
 
 const string strSeparator = "======================================================================";
-const string strOptions[15] = {
+const string strOptions[16] = {
     "Quit the program.",
     "Build a binary tree from a text file.",
     "Build a binary tree from data inserted by the user.",
@@ -31,7 +32,11 @@ const string strOptions[15] = {
     "Convert the tree to list and sort via Selection Sort.",
     "Convert the tree to list and sort via Insertion Sort.",
     "Convert the tree to list and sort via Shell Sort.",
+    "Display tests from driver_code.cpp"
 };
+
+// Loop
+void loop();
 
 // Menu functions
 void printMenu();
