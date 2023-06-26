@@ -1,11 +1,12 @@
 #include <iostream>
 #include "functions.h"
+#include "driver_code.h"
 
 using std::cout;
 using std::endl;
 using std::cin;
 
-int main()
+int test()
 {
     cout << "========== Testing newNode() ==========" << endl;
     
