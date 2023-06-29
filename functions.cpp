@@ -1,23 +1,7 @@
 #include <iostream>
-#include "function.h"
+#include "functions.h"
 
 using namespace std;
-/////////////////////////////////////////////////////////////////////////////////////
-//Definindo estruturas:
-struct NodeList
-{
-    int iPayload;            // Payload data stored in the node
-    struct NodeList* ptrPrev;  // Pointer to the previous node in the list
-    struct NodeList* ptrNext;  // Pointer to the next node in the list
-};
-
-struct Node
-{
-    int iPayload;            // Payload data stored in the node
-    struct Node* ptrLeft;     // Pointer to the left child node
-    struct Node* ptrRight;    // Pointer to the right child node
-};
-
 
 //Chamando funções:
 struct NodeList* newNodeList(int);
@@ -136,7 +120,7 @@ struct NodeList* listCurrentLevel(struct NodeList* head, struct Node* root, int 
  * 
  * @return A pointer to the head of the created doubly linked list.
  */
-struct NodeList* listTree(struct Node* root)
+struct NodeList* traverseBFS(struct Node* root)
 {
     struct NodeList* head;
     head = nullptr;
@@ -146,6 +130,231 @@ struct NodeList* listTree(struct Node* root)
         head = listCurrentLevel(head, root, i);
     }
     return head;
+}
+/**
+ * AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+ * Creates a doubly linked list by listing the nodes of a binary tree in breadth-first order.
+ * DOCUMENTAR ESSA PORRA DIREITO
+ * @param root A pointer to the root of the binary tree.
+ * FUNÇÃO QUE RETORNA O TAMANHO DA LISTA
+ * @return A pointer to the head of the created doubly linked list.
+ */
+int getLength(struct NodeList* ptrHead)
+{
+    struct NodeList* ptrCurrent = ptrHead;
+    int iLength = 1;
+
+    while (ptrCurrent->ptrNext != nullptr)
+    {
+        ptrCurrent = ptrCurrent->ptrNext;
+        iLength++;
+    }
+
+    return iLength;
+}
+/**
+ * AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+ * Creates a doubly linked list by listing the nodes of a binary tree in breadth-first order.
+ * DOCUMENTAR ESSA PORRA DIREITO
+ * @param root A pointer to the root of the binary tree.
+ * FUNÇÃO QUE PEGA O NÓ PELO INDEX, COMEA DO 0
+ * @return A pointer to the head of the created doubly linked list.
+ */
+struct NodeList* getNodeByIndex(struct NodeList* ptrHead, int iIndex)
+{
+    struct NodeList* ptrCurrent = ptrHead;
+    
+    for (int i = 0; i < iIndex; i++)
+    {
+        ptrCurrent = ptrCurrent->ptrNext;
+    }
+
+    return ptrCurrent;
+}
+
+/**
+ * AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+ * Creates a doubly linked list by listing the nodes of a binary tree in breadth-first order.
+ * DOCUMENTAR ESSA PORRA DIREITO
+ * @param root A pointer to the root of the binary tree.
+ * FUNÇÃO QUE PEGA O NÓ PELO INDEX, COMEA DO 0
+ * @return A pointer to the head of the created doubly linked list.
+ */
+void swapNodes(struct NodeList** ptrHead, struct NodeList* ptrNodeA, struct NodeList* ptrNodeB)
+{
+    // Assumes nodeA comes before nodeB
+    if (ptrNodeA == *ptrHead)
+    {
+        if (ptrNodeA->ptrNext == ptrNodeB)
+        {
+            ptrNodeA->ptrNext = ptrNodeB->ptrNext;
+            if (ptrNodeB->ptrNext != nullptr) ptrNodeB->ptrNext->ptrPrev = ptrNodeA;
+            ptrNodeA->ptrPrev = ptrNodeB;
+            ptrNodeB->ptrNext = ptrNodeA;
+            ptrNodeB->ptrPrev = nullptr;
+
+            (*ptrHead) = ptrNodeB;
+        }
+        else
+        {
+            struct NodeList* ptrCurrentBPrev = ptrNodeB->ptrPrev;
+            struct NodeList* ptrCurrentBNext = ptrNodeB->ptrNext;
+
+            ptrNodeB->ptrNext = ptrNodeA->ptrNext;
+            ptrNodeB->ptrPrev = nullptr;
+            ptrCurrentBPrev->ptrNext = ptrNodeA;
+            if (ptrCurrentBNext != nullptr) ptrCurrentBNext->ptrPrev = ptrNodeA;
+            ptrNodeA->ptrNext->ptrPrev = ptrNodeB;
+            ptrNodeA->ptrNext = ptrCurrentBNext;
+            ptrNodeA->ptrPrev = ptrCurrentBPrev;
+
+            (*ptrHead) = ptrNodeB;
+        }
+    }
+    else
+    {
+        if (ptrNodeA->ptrNext == ptrNodeB)
+        {
+            ptrNodeA->ptrNext = ptrNodeB->ptrNext;
+            if (ptrNodeB->ptrNext != nullptr) ptrNodeB->ptrNext->ptrPrev = ptrNodeA;
+            ptrNodeB->ptrPrev = ptrNodeA->ptrPrev;
+            ptrNodeA->ptrPrev->ptrNext = ptrNodeB;
+            ptrNodeB->ptrNext = ptrNodeA;
+            ptrNodeA->ptrPrev = ptrNodeB;
+        }
+        else
+        {
+            struct NodeList* ptrCurrentAPrev = ptrNodeA->ptrPrev;
+            struct NodeList* ptrCurrentBPrev = ptrNodeB->ptrPrev;
+
+            struct NodeList* ptrCurrentANext = ptrNodeA->ptrNext;
+            struct NodeList* ptrCurrentBNext = ptrNodeB->ptrNext;
+
+            ptrNodeA->ptrPrev = ptrNodeB->ptrPrev;
+            ptrNodeB->ptrPrev = ptrCurrentAPrev;
+
+            ptrCurrentAPrev->ptrNext = ptrNodeB;
+            ptrCurrentBPrev->ptrNext = ptrNodeA;
+
+            ptrNodeA->ptrNext = ptrNodeB->ptrNext;
+            ptrNodeB->ptrNext = ptrCurrentANext;
+
+            ptrCurrentANext->ptrPrev = ptrNodeB;
+            if (ptrCurrentBNext != nullptr) ptrCurrentBNext->ptrPrev = ptrNodeA;
+        }
+    }
+}
+
+/**
+ * AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+ * Creates a doubly linked list by listing the nodes of a binary tree in breadth-first order.
+ * DOCUMENTAR ESSA PORRA DIREITO
+ * @param root A pointer to the root of the binary tree.
+ * FUNÇÃO QUE PEGA O NÓ PELO INDEX, COMEA DO 0
+ * @return A pointer to the head of the created doubly linked list.
+ */
+void selectionSort(struct NodeList** ptrHead)
+{
+    struct NodeList* ptrCurrent = *ptrHead;
+    int iLength = getLength(*ptrHead);
+    
+    for (int i = 0; i < iLength; i++)
+    {
+        ptrCurrent = getNodeByIndex(*ptrHead, i);
+        struct NodeList* min = ptrCurrent;
+        struct NodeList* r = ptrCurrent;
+
+        while (r != nullptr)
+        {
+            if (min->iPayload > r->iPayload)
+            {
+                min = r;
+            }
+
+            r = r->ptrNext;
+        }
+
+        if (min != ptrCurrent)
+        {
+            swapNodes(ptrHead, ptrCurrent, min);
+        }
+    }
+}
+
+
+void insertionSort(struct NodeList** ptrHead)
+{
+    struct NodeList* ptrCurrent1 = *ptrHead;
+    struct NodeList* ptrCurrent2 = *ptrHead;
+    int iLength = getLength(ptrCurrent1);
+
+    for (int i = 1; i < iLength; i++)
+    {
+        for (int j = i; j > 0; j--)
+        {
+            ptrCurrent1 = getNodeByIndex(*ptrHead, j);
+            ptrCurrent2 = getNodeByIndex(*ptrHead, j - 1);
+
+            if (ptrCurrent1->iPayload < ptrCurrent2->iPayload)
+            {
+                swapNodes(ptrHead, ptrCurrent2, ptrCurrent1);
+            }
+        }
+    }
+}
+
+
+void shellSort(struct NodeList** ptrHead)
+{
+    struct NodeList* ptrCurrent = *ptrHead;
+    int iLength = getLength(*ptrHead);
+    int iGap = 1;
+
+    while (iGap < iLength) iGap = 3 * iGap + 1;
+
+    for (iGap = (iGap - 1) / 3; iGap > 0; iGap = (iGap - 1) / 3)
+    {
+        for (int i = iGap; i < iLength; i++)
+        {
+            for (int j = i; j >= iGap; j -= iGap)
+            {
+                ptrCurrent = getNodeByIndex(*ptrHead, j);
+                struct NodeList* ptrCurrent2 = getNodeByIndex(*ptrHead, j - iGap);
+
+                if (ptrCurrent->iPayload < ptrCurrent2->iPayload)
+                {
+                    swapNodes(ptrHead, ptrCurrent2, ptrCurrent);
+                }
+            }
+        }
+    }
+}
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+void bubbleSort(struct NodeList** ptrHead)
+{
+    struct NodeList* ptrRoot = *ptrHead;
+    int iLength = getLength(*ptrHead);
+    bool bUnordered = true;
+    
+    for (int iOuterLoop = 0; iOuterLoop < iLength; iOuterLoop++)
+    {
+        bUnordered = false;
+        for (int iInnerLoop = 0; iInnerLoop < iLength - 1 - iOuterLoop; iInnerLoop++)
+        {
+            struct NodeList* ptrTempA = getNodeByIndex(*ptrHead, iInnerLoop);
+            struct NodeList* ptrTempB = getNodeByIndex(*ptrHead, iInnerLoop + 1);
+        
+            
+            if (ptrTempA->iPayload > ptrTempB->iPayload)
+            {
+                swapNodes(ptrHead, ptrTempA, ptrTempB);
+                bUnordered = true;
+            }
+            
+        }
+        if (!bUnordered) break;
+    }
+
 }
 ///////////////////////////////////////////////////////////////////////////////////////////////
 /**
@@ -254,39 +463,6 @@ void printBFS(struct Node* root)
     }
 } 
 
-int main()
-{
-    struct Node* root;
-    root = nullptr;
-    root = insertNode(root, 42);
-    root = insertNode(root, 7);
-    root = insertNode(root, 666);
-    root = insertNode(root, 1);
-    root = insertNode(root, 13);
-    root = insertNode(root, 5);
-    root = insertNode(root, 59);
-    root = insertNode(root, 2023);
-    root = insertNode(root, 27);
-    
-    struct NodeList* head;
-    head = nullptr;
-    head = insertNodeList(head, 1);
-    head = insertNodeList(head, 2);
-    head = insertNodeList(head, 3);
-    head = insertNodeList(head, 5);
-    head = insertNodeList(head, 6);
-    head = insertNodeList(head, 7);
-    
-    //printList(head);    
-    //printCurrentLevel(root, 3);
-    //cout << endl;
-    cout << "Iniciando teste" << endl;
-    struct NodeList* headTeste;
-    headTeste = nullptr;
-    headTeste = listTree(root);
-    printList(headTeste);
-    cout << "Testado" << endl;
-    //printBFS(root);    
-    return 0;
-}
+////////////////////////////////////////////////////////////////////////////////////////
+
 
