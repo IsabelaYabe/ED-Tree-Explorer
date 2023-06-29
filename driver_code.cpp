@@ -6,7 +6,7 @@ using std::cout;
 using std::endl;
 using std::cin;
 
-int test()
+void test()
 {
     cout << "========== Testing newNode() ==========" << endl;
     
@@ -82,6 +82,39 @@ int test()
     cout << (ptrRoot->ptrRight->ptrRight->ptrLeft->iData == 16) << endl;
     cout << (ptrRoot->ptrRight->ptrRight->ptrRight->iData == 20) << endl;
     
+    cout << "\n========== Testing deleteTree() ==========" << endl;
+    
+    cout << "Current tree:" << endl;
+    traversePreOrder(ptrRoot);
+    cout << endl;
+    
+    cout << "\nDeleting the whole tree..." << endl;
+    deleteTree(&ptrRoot);
+    
+    cout << "\nNow the tree is empty and `ptrRoot` is `nullptr`.\nTraverse preOrder:" << endl;
+    traversePreOrder(ptrRoot);
+    cout << endl;
+    
+    cout << "\nRebuilding tree..." << endl;
+    insertNode(&ptrRoot, 10);
+    insertNode(&ptrRoot, 5);
+    insertNode(&ptrRoot, 15);
+    insertNode(&ptrRoot, 7);
+    insertNode(&ptrRoot, 3);
+    insertNode(&ptrRoot, 2);
+    insertNode(&ptrRoot, 4);
+    insertNode(&ptrRoot, 9);
+    insertNode(&ptrRoot, 6);
+    insertNode(&ptrRoot, 12);
+    insertNode(&ptrRoot, 13);
+    insertNode(&ptrRoot, 11);
+    insertNode(&ptrRoot, 18);
+    insertNode(&ptrRoot, 16);
+    insertNode(&ptrRoot, 20);
+    
+    traversePreOrder(ptrRoot);
+    cout << endl;
+    
     cout << "\n========== Testing getSmallestChild() ==========" << endl;
     
     struct Node* ptrSmallest = getSmallestChild(ptrRoot);
@@ -124,7 +157,7 @@ int test()
 
     cout << "\nDoes searching for 16 return nullptr? " << (searchNode(ptrRoot, 16) == nullptr) << endl;
     cout << "What is the address of the node with 16? " << searchNode(ptrRoot, 16) << endl;
-
+    
     cout << "\n========== Testing getHeight() ==========" << endl;
 
     cout << "Height of ptrRoot: " << getHeight(ptrRoot) << endl;
@@ -190,6 +223,7 @@ int test()
 
     cout << "Is ptrRoot perfect? " << isPerfect(ptrRoot, getHeight(ptrRoot), 1) << endl;
 
+
     cout << "\n========== Testing isComplete() ==========" << endl;
 
     cout << "Is ptrRoot complete? " << isComplete(ptrRoot, getHeight(ptrRoot), 1) << endl;
@@ -223,6 +257,30 @@ int test()
     ptrRoot = deleteNode(ptrRoot, 12);
 
     cout << "Is ptrRoot complete? " << isComplete(ptrRoot, getHeight(ptrRoot), 1) << endl;
-
-    return 0;
+    
+    /******************************/
+    
+    cout << "\n========== Testing isNumeric() ==========" << endl;
+    
+    // Define some strings to test
+    string arrstrExampleStrings[5] = {"1234", "foo", "   ", "-10", "-98th"};
+    
+    for (int i=0; i<5; i++)
+    {
+        cout << "Is \"" << arrstrExampleStrings[i] << "\" numeric?\t";
+        cout << isNumeric(arrstrExampleStrings[i]) << endl;
+    }
+    
+    cout << "\n========== Testing askFileName() ==========" << endl;
+    
+    cout << "This is just a test of `askFileName` function." << endl;
+    string strSampleFile = askFileName();
+    cout << "You typed: " << strSampleFile << endl;
+    
+    
+    cout << "\n========== Testing askElement() ==========" << endl;
+    
+    cout << "This is just a test of `askElement` function." << endl;
+    int iSampleInteger = askElement();
+    cout << "You typed: " << iSampleInteger << endl;
 }
