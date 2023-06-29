@@ -132,12 +132,10 @@ struct NodeList* traverseBFS(struct Node* root)
     return head;
 }
 /**
- * AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
- * Creates a doubly linked list by listing the nodes of a binary tree in breadth-first order.
- * DOCUMENTAR ESSA PORRA DIREITO
- * @param root A pointer to the root of the binary tree.
- * FUNÇÃO QUE RETORNA O TAMANHO DA LISTA
- * @return A pointer to the head of the created doubly linked list.
+ * Calculates the length of a linked list.
+ * 
+ * @param ptrHead A pointer to the head of the linked list.
+ * @return The length of the linked list.
  */
 int getLength(struct NodeList* ptrHead)
 {
@@ -153,12 +151,11 @@ int getLength(struct NodeList* ptrHead)
     return iLength;
 }
 /**
- * AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
- * Creates a doubly linked list by listing the nodes of a binary tree in breadth-first order.
- * DOCUMENTAR ESSA PORRA DIREITO
- * @param root A pointer to the root of the binary tree.
- * FUNÇÃO QUE PEGA O NÓ PELO INDEX, COMEA DO 0
- * @return A pointer to the head of the created doubly linked list.
+ * Retrieves a node from a linked list by its index.
+ * 
+ * @param ptrHead A pointer to the head of the linked list.
+ * @param iIndex The index of the desired node (starting from 0).
+ * @return A pointer to the node at the specified index.
  */
 struct NodeList* getNodeByIndex(struct NodeList* ptrHead, int iIndex)
 {
@@ -173,16 +170,16 @@ struct NodeList* getNodeByIndex(struct NodeList* ptrHead, int iIndex)
 }
 
 /**
- * AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
- * Creates a doubly linked list by listing the nodes of a binary tree in breadth-first order.
- * DOCUMENTAR ESSA PORRA DIREITO
- * @param root A pointer to the root of the binary tree.
- * FUNÇÃO QUE PEGA O NÓ PELO INDEX, COMEA DO 0
- * @return A pointer to the head of the created doubly linked list.
+ * Swaps two nodes in a doubly linked list.
+ * Assumes nodeA comes before nodeB
+ * 
+ * @param ptrHead A pointer to the pointer to the head of the linked list.
+ * @param ptrNodeA A pointer to the first node to be swapped.
+ * @param ptrNodeB A pointer to the second node to be swapped.
+ * @return void
  */
 void swapNodes(struct NodeList** ptrHead, struct NodeList* ptrNodeA, struct NodeList* ptrNodeB)
 {
-    // Assumes nodeA comes before nodeB
     if (ptrNodeA == *ptrHead)
     {
         if (ptrNodeA->ptrNext == ptrNodeB)
@@ -246,12 +243,10 @@ void swapNodes(struct NodeList** ptrHead, struct NodeList* ptrNodeA, struct Node
 }
 
 /**
- * AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
- * Creates a doubly linked list by listing the nodes of a binary tree in breadth-first order.
- * DOCUMENTAR ESSA PORRA DIREITO
- * @param root A pointer to the root of the binary tree.
- * FUNÇÃO QUE PEGA O NÓ PELO INDEX, COMEA DO 0
- * @return A pointer to the head of the created doubly linked list.
+ * Sorts a doubly linked list using the selection sort algorithm.
+ * 
+ * @param ptrHead A pointer to the pointer to the head of the linked list.
+ * @return void
  */
 void selectionSort(struct NodeList** ptrHead)
 {
@@ -281,7 +276,12 @@ void selectionSort(struct NodeList** ptrHead)
     }
 }
 
-
+/**
+ * Sorts a doubly linked list using the insertion sort algorithm.
+ * 
+ * @param ptrHead A pointer to the pointer to the head of the linked list.
+ * @return void
+ */
 void insertionSort(struct NodeList** ptrHead)
 {
     struct NodeList* ptrCurrent1 = *ptrHead;
@@ -303,7 +303,12 @@ void insertionSort(struct NodeList** ptrHead)
     }
 }
 
-
+/**
+ * Sorts a doubly linked list using the shell sort algorithm.
+ * 
+ * @param ptrHead A pointer to the pointer to the head of the linked list.
+ * @return void
+ */
 void shellSort(struct NodeList** ptrHead)
 {
     struct NodeList* ptrCurrent = *ptrHead;
@@ -329,7 +334,13 @@ void shellSort(struct NodeList** ptrHead)
         }
     }
 }
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+/**
+ * Sorts a doubly linked list using the bubble sort algorithm.
+ * 
+ * @param ptrHead A pointer to the pointer to the head of the linked list.
+ * @return void
+ */
 void bubbleSort(struct NodeList** ptrHead)
 {
     struct NodeList* ptrRoot = *ptrHead;
@@ -356,7 +367,7 @@ void bubbleSort(struct NodeList** ptrHead)
     }
 
 }
-///////////////////////////////////////////////////////////////////////////////////////////////
+
 /**
  * Creates a new node for the binary tree with the given data and nullptr as left and right child nodes.
  * 
@@ -456,13 +467,15 @@ void printCurrentLevel(struct Node* root, int iLevel)
  */
 void printBFS(struct Node* root)
 {
+    if(root == nullptr)
+    {
+        cout << "Árvore vazia" << endl;
+    }
     int iDepth = depth(root);
     for (int i = 1; i <= iDepth; i++)
     {
         printCurrentLevel(root, i);
     }
 } 
-
-////////////////////////////////////////////////////////////////////////////////////////
 
 

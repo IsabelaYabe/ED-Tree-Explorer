@@ -28,7 +28,7 @@ int getLength(struct NodeList*);
 
 struct NodeList* getNodeByIndex(struct NodeList*, int);
 
-void swapNodes(struct Node**, struct Node*, struct Node*);
+void swapNodes(struct NodeList**, struct NodeList*, struct NodeList*);
 
 void selectionSort(struct NodeList**);
 
@@ -37,7 +37,7 @@ void insertionSort(struct NodeList**);
 void shellSort(struct NodeList**);
 
 void bubbleSort(struct NodeList**);
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 struct Node* newNode(int);
 
 struct Node* insertNode(struct Node*, int);
@@ -47,3 +47,41 @@ int depth(struct Node*);
 void printCurrentLevel(struct Node*, int);
 
 void printBFS(struct Node*);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
