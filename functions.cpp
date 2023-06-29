@@ -11,6 +11,10 @@ using std::cin;
 using std::string;
 using namespace std::chrono;
 
+/***************************************************************************************************************************************/
+
+// Base functions
+
 /**
  * Creates a new node with the given data and nullptr as left and right nodes.
  * 
@@ -67,7 +71,7 @@ void insertNode(struct Node** ptrRoot, int iData)
         // if the tree is empty, the inserted node becomes the root
         (*ptrRoot) = newNode(iData);
     }
-    else if (iData <= (*ptrRoot)->iData)
+    else if (iData < (*ptrRoot)->iData)
     {
         // if the inserted value is less than the root, insert it in the left subtree
         insertNode(&((*ptrRoot)->ptrLeft), iData);
@@ -77,6 +81,29 @@ void insertNode(struct Node** ptrRoot, int iData)
         // if the inserted value is greater than the root, insert it in the right subtree
         insertNode(&((*ptrRoot)->ptrRight), iData);
     }
+}
+
+/**
+ * Deletes the entire tree from bottom up to avoid memory leakage.
+ * 
+ * @param ptrRoot A pointer to the root node of the tree to be deleted.
+ * 
+ * @return Void.
+ */
+void deleteTree(struct Node** ptrRoot)
+{
+    // Base case: If the tree is empty (root is nullptr), return
+    if (*ptrRoot == nullptr) return;
+
+    // Delete left and right subtrees
+    deleteTree(&(*ptrRoot)->ptrLeft);
+    deleteTree(&(*ptrRoot)->ptrRight);
+
+    // Delete the current node
+    free(*ptrRoot);
+
+    // Set the pointer to `nullptr`
+    *ptrRoot = nullptr;
 }
 
 /**
@@ -271,22 +298,29 @@ bool isComplete(struct Node* ptrRoot, int iTreeHeight, int iBranchHeight)
                  (isComplete(ptrRoot->ptrLeft, iTreeHeight, iBranchHeight + 1) && isPerfect(ptrRoot->ptrRight, iTreeHeight, iBranchHeight + 2)));
 }
 
+/***************************************************************************************************************************************/
+
 // Main loop of the program
+
 /**
- * ...
+ * Runs the main loop of the program
  * 
  * @return Void.
  */
 void loop()
 {
+    // Greeting message
+    cout << strSeparator << endl;
+    cout << strGreetingMessage << endl;
+    
     // Define the sentinel and the execution holder
     int iSentinel = 0;
     bool bExecuting = true;
     
-    // Define the pointer to the root of the tree
+    // Define the tree root (it's only possible to have one tree at a time)
     struct Node* ptrRoot = nullptr;
     
-    // Main loop of the program
+    // Do the loop
     while (bExecuting)
     {
         // Print the menu of options and ask a new input
@@ -296,21 +330,25 @@ void loop()
         // Handle input error
         if (!iSentinel)
         {
-            cout << "Invalid entry! Please, insert only a number.\n" << endl;
-            cin.clear();  // Clear the error flag
-            cin.ignore(numeric_limits<streamsize>::max(), '\n');  // Clear the input buffer
+            // Display error message
+            cout << strErrorMessage << endl;
+            cout << endl;
+            
+            // Clear the error flag and the input buffer
+            cin.clear();
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');
             continue;
         }
         
-        // Perform actions
+        // Perform operations
         switch (iSentinel)
         {
             case 1: // Quit the program
             {
-                cout << "Quitting\n" << endl;
-                cout << strSeparator << "\n" << endl;
+                // Set `bExecuting` to false to stop the while loop
                 bExecuting = false;
-                break;
+                
+                cout << endl; break;
             }
             
             case 2: // Build a binary tree from a text file
@@ -318,152 +356,304 @@ void loop()
                 // Ask the user to enter the text file name
                 string strFileName = askFileName();
                 
+                /******************************/
+                
                 // Start the timer
                 auto timeStart = high_resolution_clock::now();
                 
                 // Build the tree
-                struct Node* ptrRoot = buildFromFile(strFileName);
+                ptrRoot = buildFromFile(ptrRoot, strFileName);
                 
                 // Stop the timer and compute the duration
                 auto timeStop = high_resolution_clock::now();
                 auto timeDuration = duration_cast<milliseconds>(timeStop - timeStart);
                 
-                // Report the time taken to complete the operation
-                cout << "Task finnished in: " << timeDuration.count() << " milliseconds." << endl;
+                /******************************/
                 
-                traversePreOrder(ptrRoot);
+                // Report the time taken to complete the operation
+                cout << "\nTask finnished in: " << timeDuration.count() << " milliseconds." << endl;
                 
                 break;
             }
             
-            case 3: // Build a binary tree from data entered by the user
+            case 3: // Build a binary tree from numbers inserted in the terminal.
             {
+                /******************************/
+                
                 // Start the timer
                 auto timeStart = high_resolution_clock::now();
                 
                 // Build the tree
-                struct Node* ptrRoot = buildFromUser();
+                ptrRoot = buildFromUser(ptrRoot);
                 
                 // Stop the timer and compute the duration
                 auto timeStop = high_resolution_clock::now();
                 auto timeDuration = duration_cast<milliseconds>(timeStop - timeStart);
                 
+                /******************************/
+                
                 // Report the time taken to complete the operation
-                cout << "Task finnished in: " << timeDuration.count() << " milliseconds." << endl;
-                
-                traversePreOrder(ptrRoot);
+                cout << "\nTask finnished in: " << timeDuration.count() << " milliseconds." << endl;
                 
                 break;
             }
             
-            case 4:
+            case 4: // Get the height of the tree.
             {
-                cout << "Executing 4\n" << endl;
+                /******************************/
+                
+                // Start the timer
+                auto timeStart = high_resolution_clock::now();
+                
+                // Calculate the height
+                int iTreeHeight = getHeight(ptrRoot);
+                
+                // Stop the timer and compute the duration
+                auto timeStop = high_resolution_clock::now();
+                auto timeDuration = duration_cast<milliseconds>(timeStop - timeStart);
+                
+                /******************************/
+                
+                // Print the height
+                cout << "The height of the tree is: " << iTreeHeight << endl;
+                
+                // Report the time taken to complete the operation
+                cout << "\nTask finnished in: " << timeDuration.count() << " milliseconds." << endl;
+                
                 break;
             }
             
-            case 5:
+            case 5: // Get the size of the tree.
             {
-                cout << "Executing 5\n" << endl;
+                /******************************/
+                
+                // Start the timer
+                auto timeStart = high_resolution_clock::now();
+                
+                // Calculate the height
+                int iTreeSize = getNumberOfNodes(ptrRoot);
+                
+                // Stop the timer and compute the duration
+                auto timeStop = high_resolution_clock::now();
+                auto timeDuration = duration_cast<milliseconds>(timeStop - timeStart);
+                
+                /******************************/
+                
+                // Print the height
+                cout << "The size of the tree is: " << iTreeSize << endl;
+                
+                // Report the time taken to complete the operation
+                cout << "\nTask finnished in: " << timeDuration.count() << " milliseconds." << endl;
+                
                 break;
             }
             
-            case 6:
+            case 6: // Insert an element into the tree.
             {
-                cout << "Executing 6\n" << endl;
+                // Ask the user to enter the number to be inserted
+                int iNumber = askElement();
+                
+                /******************************/
+                
+                // Start the timer
+                auto timeStart = high_resolution_clock::now();
+                
+                // Insert the received integer into the tree
+                insertNode(&ptrRoot, iNumber);
+                
+                // Stop the timer and compute the duration
+                auto timeStop = high_resolution_clock::now();
+                auto timeDuration = duration_cast<milliseconds>(timeStop - timeStart);
+                
+                /******************************/
+                
+                // Report the time taken to complete the operation
+                cout << "\nTask finnished in: " << timeDuration.count() << " milliseconds." << endl;
+                
                 break;
             }
             
-            case 7:
+            case 7: // Remove an element off the tree.
             {
-                cout << "Executing 7\n" << endl;
+                // Ask the user to enter the number to be removed
+                int iNumber = askElement();
+                
+                /******************************/
+                
+                // Start the timer
+                auto timeStart = high_resolution_clock::now();
+                
+                // Remove the received integer from the tree
+                ptrRoot = deleteNode(ptrRoot, iNumber);
+                
+                // Stop the timer and compute the duration
+                auto timeStop = high_resolution_clock::now();
+                auto timeDuration = duration_cast<milliseconds>(timeStop - timeStart);
+                
+                /******************************/
+                
+                // Report the time taken to complete the operation
+                cout << "\nTask finnished in: " << timeDuration.count() << " milliseconds." << endl;
+                
                 break;
             }
             
-            case 8:
+            case 8: // Search the memory address of an element.
             {
-                cout << "Executing 8\n" << endl;
+                // Ask the user to enter the number to be searched
+                int iNumber = askElement();
+                
+                /******************************/
+                
+                // Start the timer
+                auto timeStart = high_resolution_clock::now();
+                
+                // Remove the received integer from the tree
+                struct Node* ptrSearchedNode = searchNode(ptrRoot, iNumber);
+                
+                // Stop the timer and compute the duration
+                auto timeStop = high_resolution_clock::now();
+                auto timeDuration = duration_cast<milliseconds>(timeStop - timeStart);
+                
+                /******************************/
+                
+                // Print the memory address of the requested element
+                cout << "The memory address of " << iNumber << " is: " << ptrSearchedNode << endl;
+                
+                // Report the time taken to complete the operation
+                cout << "\nTask finnished in: " << timeDuration.count() << " milliseconds." << endl;
+                
                 break;
             }
             
-            case 9:
+            case 9: // Ask if the tree is complete.
             {
-                cout << "Executing 9\n" << endl;
+                // Initialize the boolean to store the answer
+                bool bIsComplete = true;
+                
+                /******************************/
+                
+                // Start the timer
+                auto timeStart = high_resolution_clock::now();
+                
+                // Check if the tree is complete
+                bIsComplete = isComplete(ptrRoot, getHeight(ptrRoot), 1);
+                
+                // Stop the timer and compute the duration
+                auto timeStop = high_resolution_clock::now();
+                auto timeDuration = duration_cast<milliseconds>(timeStop - timeStart);
+                
+                /******************************/
+                
+                // Print the answer
+                if (bIsComplete) cout << "Yes, the tree is complete." << endl;
+                else cout << "No, the tree is not complete." << endl;
+                
+                // Report the time taken to complete the operation
+                cout << "\nTask finnished in: " << timeDuration.count() << " milliseconds." << endl;
+                
                 break;
             }
             
-            case 10:
+            case 10: // Ask if the tree is perfect.
             {
-                cout << "Executing 10\n" << endl;
+                // Initialize the boolean to store the answer
+                bool bIsPerfect = true;
+                
+                /******************************/
+                
+                // Start the timer
+                auto timeStart = high_resolution_clock::now();
+                
+                // Check if the tree is complete
+                bIsPerfect = isPerfect(ptrRoot, getHeight(ptrRoot), 1);
+                
+                // Stop the timer and compute the duration
+                auto timeStop = high_resolution_clock::now();
+                auto timeDuration = duration_cast<milliseconds>(timeStop - timeStart);
+                
+                /******************************/
+                
+                // Print the answer
+                if (bIsPerfect) cout << "Yes, the tree is perfect." << endl;
+                else cout << "No, the tree is not perfect." << endl;
+                
+                // Report the time taken to complete the operation
+                cout << "\nTask finnished in: " << timeDuration.count() << " milliseconds." << endl;
+                
                 break;
             }
             
-            case 11:
+            case 11: // Exhibit the tree using BFS.
             {
-                cout << "Executing 11\n" << endl;
+                cout << "Executing 11" << endl;
                 break;
             }
             
-            case 12:
+            case 12: // Convert the tree to list and sort via Bubble Sort.
             {
-                cout << "Executing 12\n" << endl;
+                cout << "Executing 12" << endl;
                 break;
             }
             
-            case 13:
+            case 13: // Convert the tree to list and sort via Selection Sort.
             {
-                cout << "Executing 13\n" << endl;
+                cout << "Executing 13" << endl;
                 break;
             }
             
-            case 14:
+            case 14: // Convert the tree to list and sort via Insertion Sort.
             {
-                cout << "Executing 14\n" << endl;
+                cout << "Executing 14" << endl;
                 break;
             }
             
-            case 15:
+            case 15: // Convert the tree to list and sort via Shell Sort.
             {
-                cout << "Executing 15\n" << endl;
+                cout << "Executing 15" << endl;
                 break;
             }
             
-            case 16:
+            case 16: // Display tests from driver_code.cpp
             {
-                cout << "chamando a função int test()" << endl;
-                int a = test();
-                if (!a) cout << "Tudo certo" << endl;
-                else cout << "ops." << endl;
+                // Display the tests
+                test();
+
+                cout << endl;
                 break;
             }
             
-            default: // Report error if inserted sentinel is <1 or >16.
+            default: // Report error if inserted sentinel is not in 1, ..., 16.
             {
-                cout << "Invalid number! Insert an integer between 1 and 16.\n" << endl;
-                break;
+                // Display error message
+                cout << strErrorMessage << endl;
+                cout << endl; break;
             }
         }
     }
     
-    // End the program
-    cout << "Test function" << endl;
+    // Ending message
+    cout << strSeparator << endl;
+    cout << strEndingMessage << endl;
+    cout << strSeparator << endl;
 }
 
+/***************************************************************************************************************************************/
 
-// Menu functions
+// Auxiliary functions
 
 /**
- * Print the menu ASCII with user options.
+ * Print the ASCII menu with user options.
  * 
  * @return Void.
  */
 void printMenu()
 {
-    // Start with separator string
-    cout << "\n" << strSeparator << endl;
-    cout << "Dictionary of commands. Enter the number without brackets." << endl;
+    // Start each loop with separator and instructions
+    cout << strSeparator << endl;
+    cout << strInstruction << endl;
     
-    // Iterate from 0 to 15 printing the number and the corresponding option in `strOptions`
+    // Iterate from 0 to 16 printing the number and the corresponding option in `strOptions`
     for (int i=0; i<16; i++)
     {
         cout << "[" << i+1 << "]\t" << strOptions[i] << endl;
@@ -474,13 +664,35 @@ void printMenu()
     cout << ">>> ";
 }
 
-
-// Case 2
+/**
+ * Checks if a string contains only numeric characters.
+ * 
+ * @param &strInput Reference to the input string to check.
+ * 
+ * @return True if the string contains only numeric characters, False otherwise.
+ */
+bool isNumeric(const string &strInput)
+{
+    if (strInput.empty()) return false;
+        
+    // Check if the first character is a minus sign
+    if (strInput[0] == '-')
+    {
+        // If the string has only a minus sign, it is not numeric
+        if (strInput.length() == 1) return false;
+        
+        // Check the remaining characters if they are numeric
+        return strInput.find_first_not_of("0123456789", 1) == std::string::npos;
+    }
+    
+    // Check if all characters are numeric
+    return strInput.find_first_not_of("0123456789") == std::string::npos;
+}
 
 /**
- * Ask the user for the text file name, with data to build the tree.
+ * Asks the user for the text file name, with data to build the tree.
  * 
- * @return Void.
+ * @return String with the file name.
  */
 string askFileName()
 {
@@ -489,23 +701,56 @@ string askFileName()
     
     // Ask the user to type it
     cout << "Please, insert the name of the text file with \".txt\"" << endl;
-    cout << ">>> ";
-    cin >> strFileName;
+    cout << "> "; cin >> strFileName;
     
     return strFileName;
 }
 
 /**
- * Ask the user for the text file name, with data to build the tree.
+ * Ask the user to input an integer in the terminal.
  * 
+ * @return Integer given by the user.
+ */
+int askElement()
+{
+    // Initialize the string input as empty
+    string strInput = "";
+    
+    // Run an infinite loop
+    cout << "Please, enter an integer: " << endl;
+    while (true)
+    {
+        // Ask the integer
+        cout << "> "; cin >> strInput;
+        
+        if (isNumeric(strInput))
+        {
+            // Convert the `strInput` to int type and return it
+            int iNumber = stoi(strInput);
+            return iNumber;
+        }
+        else
+        {
+            // If the user's input is non-integer, print an error message and keep asking
+            cout << "Invalid input! Please enter an integer." << endl;
+        }
+    }
+}
+
+// Functions to build the tree
+
+/**
+ * Asks the user for the text file name, with data to build the tree.
+ * 
+ * @param ptrRoot A pointer to the root of the existing tree.
  * @param strFileName A string containing the name of the text file.
  * 
  * @return A pointer to the root the tree build from the given file.
  */
-struct Node* buildFromFile(string strFileName)
+struct Node* buildFromFile(struct Node* ptrRoot, string strFileName)
 {
-    // Initialize the tree with `nullptr`
-    struct Node* ptrRoot = nullptr;
+    // Check if `ptrRoot` is empty. If not, drain it
+    if (ptrRoot != nullptr) deleteTree(&ptrRoot);
     
     // Create a string to hold the numbers in the file
     string strLine = "";
@@ -536,43 +781,17 @@ struct Node* buildFromFile(string strFileName)
     return ptrRoot;
 }
 
-
-// Case 3
-
 /**
- * Check if a string contains only numeric characters.
+ * Builds the binary tree from data entered by the user.
  * 
- * @param &strInput Reference to the input string to check.
- * 
- * @return True if the string contains only numeric characters, False otherwise.
- */
-bool isNumeric(const string &strInput)
-{
-    if (strInput.empty()) return false;
-        
-    // Check if the first character is a minus sign
-    if (strInput[0] == '-')
-    {
-        // If the string has only a minus sign, it is not numeric
-        if (strInput.length() == 1) return false;
-        
-        // Check the remaining characters if they are numeric
-        return strInput.find_first_not_of("0123456789", 1) == std::string::npos;
-    }
-    
-    // Check if all characters are numeric
-    return strInput.find_first_not_of("0123456789") == std::string::npos;
-}
-
-/**
- * Build the binary tree from data entered by the user.
+ * @param ptrRoot A pointer to the root of the existing tree.
  * 
  * @return A pointer to the root of the built tree.
  */
-struct Node* buildFromUser()
+struct Node* buildFromUser(struct Node* ptrRoot)
 {
-    // Initialize the tree with `nullptr`
-    struct Node* ptrRoot = nullptr;
+    // Check if `ptrRoot` is empty. If not, drain it
+    if (ptrRoot != nullptr) deleteTree(&ptrRoot);
     
     // Initialize the string to store user's input
     string strInput = "";
@@ -590,7 +809,7 @@ struct Node* buildFromUser()
         }
         else if (isNumeric(strInput))
         {
-            // Conver the `strInput` to int type and insert it into the tree
+            // Convert the `strInput` to int type and insert it into the tree
             int iNumber = stoi(strInput);
             insertNode(&ptrRoot, iNumber);
         }
@@ -604,3 +823,5 @@ struct Node* buildFromUser()
     // Return the built tree
     return ptrRoot;
 }
+
+/***************************************************************************************************************************************/
