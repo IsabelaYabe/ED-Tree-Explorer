@@ -1,1 +1,2 @@
-int test();
+// Test function
+void test();
