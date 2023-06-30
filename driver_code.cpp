@@ -476,4 +476,8 @@ void test()
     bubbleSort(&ptrList4);
     printList(ptrList4);
     
+    cout << "\n========== Testing printVertical() ==========" << endl;
+    cout << "Print `ptrList4` from above: " << endl;
+    printVertical(ptrList4);
+    
 }

@@ -104,6 +104,7 @@ void selectionSort(struct ListNode**);
 void insertionSort(struct ListNode**);
 void shellSort(struct ListNode**);
 void bubbleSort(struct ListNode**);
+void printVertical(struct ListNode*);
 
 /***************************************************************************************************************************************/
 
