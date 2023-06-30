@@ -1,11 +1,21 @@
 #pragma once
+
 using namespace std;
 
-struct Node
+// This is a tree's Node
+struct TreeNode
 {
-    int iData;
-    struct Node* ptrLeft;
-    struct Node* ptrRight;
+  int iData;
+  struct TreeNode *ptrLeft;
+  struct TreeNode *ptrRight;
+};
+
+// This is a list's Node
+struct ListNode
+{
+  int iData;
+  struct ListNode *ptrPrev;
+  struct ListNode *ptrNext;
 };
 
 /***************************************************************************************************************************************/
@@ -40,17 +50,39 @@ const string strInstruction = "To choose an option, enter the corresponding numb
 
 // Basic functions
 
-struct Node* newNode(int);
-void traversePreOrder(struct Node*);
-void insertNode(struct Node**, int);
-void deleteTree(struct Node** ptrRoot);
-struct Node* getSmallestChild(struct Node*);
-struct Node* deleteNode(struct Node*, int);
-struct Node* searchNode(struct Node*, int);
-int getHeight(struct Node*);
-int getNumberOfNodes(struct Node*);
-bool isPerfect(struct Node*, int, int);
-bool isComplete(struct Node*, int, int);
+struct TreeNode* newTreeNode(int);
+struct ListNode* newListNode(int);
+
+void traversePreOrder(struct TreeNode*);
+void traverseBFS(struct TreeNode*);
+
+void printList(struct ListNode*);
+void printCurrentLevel(struct TreeNode*, int);
+struct ListNode* insertCurrentLevel(struct ListNode*, struct TreeNode*, int);
+struct ListNode* insertBFS(struct TreeNode*);
+
+void swapNodes(struct ListNode**, struct ListNode*, struct ListNode*);
+struct ListNode* getNodeByIndex(struct ListNode*, int);
+
+void insertNode(struct TreeNode**, int);
+struct ListNode* insertNode(struct ListNode*, int);
+
+void deleteTree(struct TreeNode** ptrRoot);
+struct TreeNode* getSmallestChild(struct TreeNode*);
+struct TreeNode* deleteNode(struct TreeNode*, int);
+struct TreeNode* searchNode(struct TreeNode*, int);
+
+int getHeight(struct TreeNode*);
+int getNumberOfNodes(struct TreeNode*);
+int getLength(struct ListNode*);
+
+bool isPerfect(struct TreeNode*, int, int);
+bool isComplete(struct TreeNode*, int, int);
+
+void selectionSort(struct ListNode**);
+void insertionSort(struct ListNode**);
+void shellSort(struct ListNode**);
+void bubbleSort(struct ListNode**);
 
 /***************************************************************************************************************************************/
 
@@ -64,7 +96,7 @@ string askFileName();
 int askElement();
 
 // Functions to build the tree
-struct Node* buildFromFile(struct Node*, string);
-struct Node* buildFromUser(struct Node*);
+struct TreeNode* buildFromFile(struct TreeNode*, string);
+struct TreeNode* buildFromUser(struct TreeNode*);
 
 /***************************************************************************************************************************************/
