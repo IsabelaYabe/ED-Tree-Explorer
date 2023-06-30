@@ -290,7 +290,6 @@ void test()
     ptrHead = nullptr;
 
     //Print empty list
-    cout << "============================================================" << endl;
     cout << "Print empty: " << endl;
     printList(ptrHead);
     
@@ -309,16 +308,15 @@ void test()
     ptrHead = insertNode(ptrHead, 36);
     
     //Print
-    cout << "============================================================" << endl;
+    cout << "Adding elements 3, 6, 9, 12, 15, 18, 21, 24, 27, 30, 33, 36 with insertNode()" << endl;
     cout << "Print list: " << endl;
     printList(ptrHead);
-    cout << "============================================================" << endl;
+    cout << "\n========== Testing traverseBFS() ==========" << endl;
     
     //Let start by creating a tree
     ptrRoot = nullptr;
     
     //Print empty tree
-    cout << "============================================================" << endl;
     cout << "Print empty tree: " << endl;
     traverseBFS(ptrRoot);
     
@@ -346,66 +344,59 @@ void test()
     insertNode(&ptrRoot, 105);
     
     //Print BFS tree
-    cout << "============================================================" << endl;
+    cout << "Adding elements 666, 21, 1024, 8, 571, 923, 1729, 6, 12, 57, 729, 1111, 1618, 1964, 232, 496, 503, 801, 1228, 31, 105 with insertNode()" << endl;
     cout << "Print BFS tree: " << endl;
     traverseBFS(ptrRoot);
     cout << endl;
-    cout << "============================================================" << endl;
+    cout << "\n========== Testing getHeight() ==========" << endl;
     cout << "Depth of tree: " << endl;
     int iDepth = getHeight(ptrRoot);
     cout << iDepth << endl;
     
     //Print levels
-    cout << "============================================================" << endl;
-    cout << "===PRINT LEVELS===" << endl;
+    cout << "\n========== Printing levels ==========" << endl;
     for(int iLevel = 0; iLevel < iDepth; iLevel++)
     {
-        cout << "Print level " << iLevel + 1 << ": " << endl;
+        cout << "\nPrint level " << iLevel + 1 << " :" << endl;
         printCurrentLevel(ptrRoot, iLevel + 1);
-        cout << endl;
-        cout << "=====:D-:D-:D-:D-:D-:D-:D=====";
         cout << endl;
     }
     
     //Insert levels
-    cout << "============================================================" << endl;
-    cout << "===INSERT and PRINT LEVELS===" << endl;
+    cout << "\n========== Testing insertCurrentLevel() ==========" << endl;
+    cout << "Insert in a  empty list and print the levels===" << endl;
     for(int iLevel = 0; iLevel < iDepth; iLevel++)
     {
         struct ListNode* ptrCurrentLevel;
         ptrCurrentLevel = nullptr;
-        cout << "List and print: " << iLevel + 1 << ": " << endl;
+        cout << "Insert and print level " << iLevel + 1 << ": " << endl;
         ptrCurrentLevel = insertCurrentLevel(ptrCurrentLevel, ptrRoot, iLevel + 1);
         printList(ptrCurrentLevel);
         cout << endl;
-        cout << "=====:D-:D-:D-:D-:D-:D-:D=====";
-        cout << endl;
     }
-    cout << "============================================================" << endl;
+    cout << "\n========== Testing insertBFS() ==========" << endl;
     cout << "Create list in BFS order and print it: " << endl;
     struct ListNode* ptrList;
     ptrList = insertBFS(ptrRoot);
     printList(ptrList);
     
-    cout << "============================================================" << endl;
-    cout << "Get length of the list: " << endl;
-    cout << "List: " << endl;
+    cout << "\n========== Testing getLength() ==========" << endl;
+    cout << "List to analyze: " << endl;
     printList(ptrHead);
     int iListLength;
-    cout << "Length: " << endl;
+    cout << "Length of the list: " << endl;
     iListLength = getLength(ptrHead);
     cout << iListLength << endl;
     
-    cout << "============================================================" << endl;
-    cout << "Get node by index: " << endl;
-    cout << "List: " << endl;
+    cout << "\n========== Testing getNodeByIndex() ==========" << endl;
+    cout << "List to analyze: " << endl;
     printList(ptrHead);
     struct ListNode* ptrNode;
     cout << "Get the 3rd element in the list (starting from 0): " << endl;
     ptrNode = getNodeByIndex(ptrHead, 2);
     cout << ptrNode->iData << endl;
     
-    cout << "============================================================" << endl;
+    cout << "\n========== Testing swapNodes() ==========" << endl;
     cout << "Swap nodes 2nd and 4th node: " << endl;
     cout << "List before swap nodes: " << endl;
     printList(ptrHead);
@@ -413,7 +404,7 @@ void test()
     swapNodes(&ptrHead, ptrHead->ptrNext, ptrHead->ptrNext->ptrNext->ptrNext);
     printList(ptrHead);
 
-    cout << "============================================================" << endl;
+    cout << "\n========== Testing selectionSort() ==========" << endl;
     cout << "Sort double linked list by selection sort: " << endl;
     cout << "List before sort: " << endl;
     printList(ptrList);
@@ -421,7 +412,7 @@ void test()
     selectionSort(&ptrList);
     printList(ptrList);
     
-    cout << "============================================================" << endl;
+    cout << "\n========== Testing insertionSort() ==========" << endl;
     cout << "Sort double linked list by insertionSort: " << endl;
     struct ListNode* ptrList2;
     ptrList2 = insertBFS(ptrRoot);
@@ -431,7 +422,7 @@ void test()
     insertionSort(&ptrList2);
     printList(ptrList2);
     
-    cout << "============================================================" << endl;
+    cout << "\n========== Testing shellSort() ==========" << endl;
     cout << "Sort double linked list by shellSort: " << endl;
     struct ListNode* ptrList3;
     ptrList3 = insertBFS(ptrRoot);
@@ -441,7 +432,7 @@ void test()
     shellSort(&ptrList3);
     printList(ptrList3);
     
-    cout << "============================================================" << endl;
+    cout << "\n========== Testing bubbleSort() ==========" << endl;
     cout << "Sort double linked list by bubbleSort: " << endl;
     struct ListNode* ptrList4;
     ptrList4 = insertBFS(ptrRoot);
