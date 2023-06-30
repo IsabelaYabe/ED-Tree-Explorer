@@ -1,87 +1,51 @@
 #pragma once
 
-struct NodeList
+// This is a tree's Node
+struct TreeNode
 {
-  int iPayload;
-  struct NodeList *ptrPrev;
-  struct NodeList *ptrNext;
+  int iData;
+  struct TreeNode *ptrLeft;
+  struct TreeNode *ptrRight;
 };
 
-struct Node
+// This is a list's Node
+struct ListNode
 {
-  int iPayload;
-  struct Node *ptrLeft;
-  struct Node *ptrRight;
+  int iData;
+  struct ListNode *ptrPrev;
+  struct ListNode *ptrNext;
 };
 
-struct NodeList* newNodeList(int);
+struct ListNode* newListNode(int);
 
-struct NodeList* insertNodeList(struct NodeList*, int);
+struct ListNode* insertNode(struct ListNode*, int);
 
-void printList(struct NodeList*);
+void printList(struct ListNode*);
 
-struct NodeList* listCurrentLevel(struct NodeList*, struct Node*, int);
+struct ListNode* insertCurrentLevel(struct ListNode*, struct TreeNode*, int);
 
-struct NodeList* traverseBFS(struct Node*);
+struct ListNode* insertBFS(struct TreeNode*);
 
-int getLength(struct NodeList*);
+int getLength(struct ListNode*);
 
-struct NodeList* getNodeByIndex(struct NodeList*, int);
+struct ListNode* getNodeByIndex(struct ListNode*, int);
 
-void swapNodes(struct NodeList**, struct NodeList*, struct NodeList*);
+void swapNodes(struct ListNode**, struct ListNode*, struct ListNode*);
 
-void selectionSort(struct NodeList**);
+void selectionSort(struct ListNode**);
 
-void insertionSort(struct NodeList**);
+void insertionSort(struct ListNode**);
 
-void shellSort(struct NodeList**);
+void shellSort(struct ListNode**);
 
-void bubbleSort(struct NodeList**);
+void bubbleSort(struct ListNode**);
 
-struct Node* newNode(int);
+struct TreeNode* newTreeNode(int);
 
-struct Node* insertNode(struct Node*, int);
+struct TreeNode* insertNode(struct TreeNode*, int);
 
-int depth(struct Node*);
+int getHeight(struct TreeNode*);
 
-void printCurrentLevel(struct Node*, int);
+void printCurrentLevel(struct TreeNode*, int);
 
-void printBFS(struct Node*);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+void traverseBFS(struct TreeNode*);

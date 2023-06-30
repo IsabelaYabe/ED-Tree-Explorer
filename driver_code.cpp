@@ -7,159 +7,170 @@ using namespace std;
 void test()
 {   
     //Let's create a doubly linked list
-    struct NodeList* head;
-    head = nullptr;
+    struct ListNode* ptrHead;
+    ptrHead = nullptr;
+
     //Print empty list
     cout << "============================================================" << endl;
     cout << "Print empty: " << endl;
-    printList(head);
+    printList(ptrHead);
+    
     //Inserting nodes
-    head = insertNodeList(head, 3);
-    head = insertNodeList(head, 6);
-    head = insertNodeList(head, 9);
-    head = insertNodeList(head, 12);
-    head = insertNodeList(head, 15);
-    head = insertNodeList(head, 18);
-    head = insertNodeList(head, 21);
-    head = insertNodeList(head, 24);
-    head = insertNodeList(head, 27);
-    head = insertNodeList(head, 30);
-    head = insertNodeList(head, 33);
-    head = insertNodeList(head, 36);
+    ptrHead = insertNode(ptrHead, 3);
+    ptrHead = insertNode(ptrHead, 6);
+    ptrHead = insertNode(ptrHead, 9);
+    ptrHead = insertNode(ptrHead, 12);
+    ptrHead = insertNode(ptrHead, 15);
+    ptrHead = insertNode(ptrHead, 18);
+    ptrHead = insertNode(ptrHead, 21);
+    ptrHead = insertNode(ptrHead, 24);
+    ptrHead = insertNode(ptrHead, 27);
+    ptrHead = insertNode(ptrHead, 30);
+    ptrHead = insertNode(ptrHead, 33);
+    ptrHead = insertNode(ptrHead, 36);
+    
     //Print
     cout << "============================================================" << endl;
     cout << "Print list: " << endl;
-    printList(head);
+    printList(ptrHead);
     cout << "============================================================" << endl;
+    
     //Let start by creating a tree
-    struct Node* root;
-    root = nullptr;
+    struct TreeNode* ptrRoot;
+    ptrRoot = nullptr;
+    
     //Print empty tree
     cout << "============================================================" << endl;
     cout << "Print empty tree: " << endl;
-    printBFS(root);
+    traverseBFS(ptrRoot);
+    
     //Inserting nodes
-    root = insertNode(root, 666);
-    root = insertNode(root, 21);
-    root = insertNode(root, 1024);
-    root = insertNode(root, 8);
-    root = insertNode(root, 571);
-    root = insertNode(root, 923);
-    root = insertNode(root, 1729);
-    root = insertNode(root, 6);
-    root = insertNode(root, 12);
-    root = insertNode(root, 57);
-    root = insertNode(root, 729);
-    root = insertNode(root, 1111);
-    root = insertNode(root, 1618);
-    root = insertNode(root, 1964);
-    root = insertNode(root, 232);
-    root = insertNode(root, 496);
-    root = insertNode(root, 503);
-    root = insertNode(root, 801);
-    root = insertNode(root, 1228);
-    root = insertNode(root, 31);
-    root = insertNode(root, 105);
+    ptrRoot = insertNode(ptrRoot, 666);
+    ptrRoot = insertNode(ptrRoot, 21);
+    ptrRoot = insertNode(ptrRoot, 1024);
+    ptrRoot = insertNode(ptrRoot, 8);
+    ptrRoot = insertNode(ptrRoot, 571);
+    ptrRoot = insertNode(ptrRoot, 923);
+    ptrRoot = insertNode(ptrRoot, 1729);
+    ptrRoot = insertNode(ptrRoot, 6);
+    ptrRoot = insertNode(ptrRoot, 12);
+    ptrRoot = insertNode(ptrRoot, 57);
+    ptrRoot = insertNode(ptrRoot, 729);
+    ptrRoot = insertNode(ptrRoot, 1111);
+    ptrRoot = insertNode(ptrRoot, 1618);
+    ptrRoot = insertNode(ptrRoot, 1964);
+    ptrRoot = insertNode(ptrRoot, 232);
+    ptrRoot = insertNode(ptrRoot, 496);
+    ptrRoot = insertNode(ptrRoot, 503);
+    ptrRoot = insertNode(ptrRoot, 801);
+    ptrRoot = insertNode(ptrRoot, 1228);
+    ptrRoot = insertNode(ptrRoot, 31);
+    ptrRoot = insertNode(ptrRoot, 105);
+    
     //Print BFS tree
     cout << "============================================================" << endl;
     cout << "Print BFS tree: " << endl;
-    printBFS(root);
+    traverseBFS(ptrRoot);
     cout << endl;
     cout << "============================================================" << endl;
     cout << "Depth of tree: " << endl;
-    int iDepth = depth(root);
+    int iDepth = getHeight(ptrRoot);
     cout << iDepth << endl;
+    
     //Print levels
     cout << "============================================================" << endl;
     cout << "===PRINT LEVELS===" << endl;
-    for(int i = 1; i <= iDepth; i++)
+    for(int iLevel = 0; iLevel < iDepth; iLevel++)
     {
-        cout << "Print level " << i << ": " << endl;
-        printCurrentLevel(root, i);
+        cout << "Print level " << iLevel + 1 << ": " << endl;
+        printCurrentLevel(ptrRoot, iLevel + 1);
         cout << endl;
         cout << "=====:D-:D-:D-:D-:D-:D-:D=====";
         cout << endl;
     }
-    //List levels
+    
+    //Insert levels
     cout << "============================================================" << endl;
-    cout << "===LIST and PRINT LEVELS===" << endl;
-    for(int i = 1; i <= iDepth; i++)
+    cout << "===INSERT and PRINT LEVELS===" << endl;
+    for(int iLevel = 0; iLevel < iDepth; iLevel++)
     {
-        struct NodeList* level;
-        level = nullptr;
-        cout << "List ande print: " << i << ": " << endl;
-        level = listCurrentLevel(level, root, i);
-        printList(level);
+        struct ListNode* ptrCurrentLevel;
+        ptrCurrentLevel = nullptr;
+        cout << "List and print: " << iLevel + 1 << ": " << endl;
+        ptrCurrentLevel = insertCurrentLevel(ptrCurrentLevel, ptrRoot, iLevel + 1);
+        printList(ptrCurrentLevel);
         cout << endl;
         cout << "=====:D-:D-:D-:D-:D-:D-:D=====";
         cout << endl;
     }
     cout << "============================================================" << endl;
-    cout << "Print list traversing the tree by BFS: " << endl;
-    struct NodeList* traverseTreeList;
-    traverseTreeList = traverseBFS(root);
-    printList(traverseTreeList);
+    cout << "Create list in BFS order and print it: " << endl;
+    struct ListNode* ptrList;
+    ptrList = insertBFS(ptrRoot);
+    printList(ptrList);
+    
     cout << "============================================================" << endl;
     cout << "Get length of the list: " << endl;
     cout << "List: " << endl;
-    printList(head);
-    int lengthList;
+    printList(ptrHead);
+    int iListLength;
     cout << "Length: " << endl;
-    lengthList = getLength(head);
-    cout << lengthList << endl;
+    iListLength = getLength(ptrHead);
+    cout << iListLength << endl;
+    
     cout << "============================================================" << endl;
     cout << "Get node by index: " << endl;
     cout << "List: " << endl;
-    printList(head);
-    struct NodeList* node;
-    cout << "Get the 3th element in the list ((starting from 0)): " << endl;
-    struct NodeList* iNode;
-    iNode = getNodeByIndex(head, 2);
-    cout << iNode->iPayload << endl;
+    printList(ptrHead);
+    struct ListNode* ptrNode;
+    cout << "Get the 3rd element in the list (starting from 0): " << endl;
+    ptrNode = getNodeByIndex(ptrHead, 2);
+    cout << ptrNode->iData << endl;
+    
     cout << "============================================================" << endl;
     cout << "Swap nodes 2nd and 4th node: " << endl;
     cout << "List before swap nodes: " << endl;
-    printList(head);
+    printList(ptrHead);
     cout << "List after swap nodes: " << endl;
-    swapNodes(&head, head->ptrNext, head->ptrNext->ptrNext->ptrNext);
-    printList(head);
-    
+    swapNodes(&ptrHead, ptrHead->ptrNext, ptrHead->ptrNext->ptrNext->ptrNext);
+    printList(ptrHead);
+
     cout << "============================================================" << endl;
     cout << "Sort double linked list by selection sort: " << endl;
     cout << "List before sort: " << endl;
-    printList(traverseTreeList);
+    printList(ptrList);
     cout << "List after sort: " << endl;    
-    selectionSort(&traverseTreeList);
-    printList(traverseTreeList);
+    selectionSort(&ptrList);
+    printList(ptrList);
     
     cout << "============================================================" << endl;
     cout << "Sort double linked list by insertionSort: " << endl;
-    struct NodeList* traverseTreeList2;
-    traverseTreeList2 = traverseBFS(root);
+    struct ListNode* ptrList2;
+    ptrList2 = insertBFS(ptrRoot);
     cout << "List before sort: " << endl;
-    printList(traverseTreeList2);
+    printList(ptrList2);
     cout << "List after sort: " << endl; 
-    insertionSort(&traverseTreeList2);
-    printList(traverseTreeList2);
+    insertionSort(&ptrList2);
+    printList(ptrList2);
     
     cout << "============================================================" << endl;
     cout << "Sort double linked list by shellSort: " << endl;
-    struct NodeList* traverseTreeList3;
-    traverseTreeList3 = traverseBFS(root);
+    struct ListNode* ptrList3;
+    ptrList3 = insertBFS(ptrRoot);
     cout << "List before sort: " << endl;
-    printList(traverseTreeList3);
+    printList(ptrList3);
     cout << "List after sort: " << endl; 
-    shellSort(&traverseTreeList3);
-    printList(traverseTreeList3);
+    shellSort(&ptrList3);
+    printList(ptrList3);
     
     cout << "============================================================" << endl;
     cout << "Sort double linked list by bubbleSort: " << endl;
-    struct NodeList* traverseTreeList4;
-    traverseTreeList4 = traverseBFS(root);
+    struct ListNode* ptrList4;
+    ptrList4 = insertBFS(ptrRoot);
     cout << "List before sort: " << endl;
-    printList(traverseTreeList4);
+    printList(ptrList4);
     cout << "List after sort: " << endl; 
-    bubbleSort(&traverseTreeList4);
-    printList(traverseTreeList4);
+    bubbleSort(&ptrList4);
+    printList(ptrList4);
     
 }
