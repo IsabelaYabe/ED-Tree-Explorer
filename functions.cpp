@@ -708,7 +708,7 @@ void efficientBFS(struct TreeNode* ptrRoot)
             enQueue(ptrQueue, ptrCurrent->ptrRight);
         }
     }
-    
+    cout << endl;
 }
 
 /***************************************************************************************************************************************/
