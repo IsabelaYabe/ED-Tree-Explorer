@@ -315,7 +315,6 @@ void test()
     cout << "============================================================" << endl;
     
     //Let start by creating a tree
-    struct TreeNode* ptrRoot;
     ptrRoot = nullptr;
     
     //Print empty tree
