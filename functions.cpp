@@ -229,6 +229,28 @@ int getHeight(struct TreeNode* ptrRoot)
 }
 
 /**
+ * Gets the height of a node in the tree.
+ * 
+ * @param ptrRoot A pointer to the root node of the tree.
+ * 
+ * @return The height of the node.
+*/
+int getNodeHeight(struct TreeNode* ptrRoot, struct TreeNode* ptrNode)
+{
+    // if the tree is empty, return 0
+    if (ptrRoot == nullptr) return 0;
+
+    // if the node is the root, return 1
+    else if (ptrRoot == ptrNode) return 1;
+
+    // if the node is in the left subtree, return 1 + the height of the node in the left subtree
+    else if (ptrNode->iData < ptrRoot->iData) return (1 + getNodeHeight(ptrRoot->ptrLeft, ptrNode));
+
+    // if the node is in the right subtree, return 1 + the height of the node in the right subtree
+    else return (1 + getNodeHeight(ptrRoot->ptrRight, ptrNode));
+}
+
+/**
  * Gets the number of nodes in the tree.
  * 
  * @param ptrRoot A pointer to the root node of the tree.
@@ -506,6 +528,156 @@ void printCurrentLevel(struct TreeNode* ptrRoot, int iLevel)
         printCurrentLevel(ptrRoot->ptrLeft, iLevel - 1);
         printCurrentLevel(ptrRoot->ptrRight, iLevel - 1);      
     }
+}
+
+/**
+ * Creates a new node for the queue.
+ * 
+ * @param ptrTreeNode A pointer to the node of the binary tree.
+ * 
+ * @return A pointer to the new node.
+*/
+struct QueueNode* newQueueNode(struct TreeNode* ptrTreeNode)
+{
+    // Allocate memory for new node
+    struct QueueNode* ptrNewNode = (struct QueueNode*) malloc(sizeof(struct QueueNode));
+
+    // Assign data to this node
+    ptrNewNode->ptrTreeNode = ptrTreeNode;
+    ptrNewNode->ptrNext = nullptr;
+    return ptrNewNode;
+}
+
+/**
+ * Creates a new queue.
+ * 
+ * @return A pointer to the new queue.
+*/
+struct Queue* newQueue()
+{
+    // Allocate memory for new queue
+    struct Queue* ptrQueue = (struct Queue*) malloc(sizeof(struct Queue));
+
+    // Assign data to this queue
+    ptrQueue->ptrFront = nullptr;
+    ptrQueue->ptrRear = nullptr;
+    return ptrQueue;
+}
+
+/**
+ * Adds a node to the end of the queue.
+ * 
+ * @param ptrQueue A pointer to the queue.
+ * 
+ * @return Void.
+*/
+void enQueue(struct Queue* ptrQueue, struct TreeNode* ptrTreeNode)
+{
+    // Create a new node
+    struct QueueNode* ptrNewNode = newQueueNode(ptrTreeNode);
+
+    // If queue is empty, then new node is front and rear both
+    if (ptrQueue->ptrRear == nullptr)
+    {
+        ptrQueue->ptrFront = ptrNewNode;
+        ptrQueue->ptrRear = ptrNewNode;
+        return;
+    }
+
+    // else, add new node at the end of queue and change rear
+    ptrQueue->ptrRear->ptrNext = ptrNewNode;
+    ptrQueue->ptrRear = ptrNewNode;
+}
+
+/**
+ * Removes the first node from the queue and returns it.
+ * 
+ * @param ptrQueue A pointer to the queue.
+ * 
+ * @return A pointer to the first node in the queue.
+*/
+struct TreeNode* deQueue(struct Queue* ptrQueue)
+{
+    // If queue is empty, there is nothing to dequeue
+    if (ptrQueue->ptrFront == nullptr)
+    {
+        return nullptr;
+    }
+
+    // Store previous front and move front one node ahead
+    struct TreeNode* ptrTreeNode = ptrQueue->ptrFront->ptrTreeNode;
+    struct QueueNode* ptrTemp = ptrQueue->ptrFront;
+
+    ptrQueue->ptrFront = ptrQueue->ptrFront->ptrNext;
+
+    // if queue becomes empty, then change rear to nullptr as well
+    if (ptrQueue->ptrFront == nullptr)
+    {
+        ptrQueue->ptrRear = nullptr;
+    }
+
+    // Free memory and return the dequeued node
+    free(ptrTemp);
+    return ptrTreeNode;
+}
+
+/**
+ * Prints the binary tree in breadth-first order using a queue.
+ * 
+ * @param ptrRoot A pointer to the root of the binary tree.
+ * 
+ * @return Void.
+*/
+void efficientBFS(struct TreeNode* ptrRoot)
+{
+    // If tree is empty, return
+    if (ptrRoot == nullptr)
+    {
+        cout << "Empty Tree" << endl;
+        return;
+    }
+
+    // Create an empty queue for level order traversal
+    struct Queue* ptrQueue = newQueue();
+    enQueue(ptrQueue, ptrRoot);
+
+    int iFrontHeight = getNodeHeight(ptrRoot, ptrQueue->ptrFront->ptrTreeNode);
+    int iCurrentHeight = iFrontHeight;
+
+    // Loop until queue is empty
+    while (ptrQueue->ptrFront != nullptr)
+    {
+        // Get and remove front of queue
+        struct TreeNode* ptrCurrent = deQueue(ptrQueue);
+
+        // Get height of current node
+        iCurrentHeight = getNodeHeight(ptrRoot, ptrCurrent);
+
+        // If the current node's height is greater than the previous' height, we have reached a new level
+        if (iCurrentHeight > iFrontHeight)
+        {
+            cout << endl;
+            cout << ptrCurrent->iData << "\t";
+            iFrontHeight = iCurrentHeight;
+        }
+        else
+        {
+            cout << ptrCurrent->iData << "\t";
+        }
+
+        // Enqueue left child
+        if (ptrCurrent->ptrLeft != nullptr)
+        {
+            enQueue(ptrQueue, ptrCurrent->ptrLeft);
+        }
+
+        // Enqueue right child
+        if (ptrCurrent->ptrRight != nullptr)
+        {
+            enQueue(ptrQueue, ptrCurrent->ptrRight);
+        }
+    }
+    
 }
 
 /***************************************************************************************************************************************/
@@ -1010,7 +1182,7 @@ void loop()
                 auto timeStart = high_resolution_clock::now();
                 
                 // Print the tree using BFS
-                traverseBFS(ptrRoot);
+                efficientBFS(ptrRoot);
                 
                 // Stop the timer and compute the duration
                 auto timeStop = high_resolution_clock::now();
