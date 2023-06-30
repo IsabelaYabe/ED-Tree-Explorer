@@ -311,7 +311,10 @@ bool isComplete(struct TreeNode* ptrRoot, int iTreeHeight, int iBranchHeight)
  */
 struct ListNode* newListNode(int iData)
 {
+    // memory allocation
     struct ListNode* newNode = (struct ListNode*) malloc(sizeof(struct ListNode));
+
+    // initialization
     newNode->iData = iData;
     newNode->ptrPrev = nullptr;
     newNode->ptrNext = nullptr;
@@ -330,22 +333,24 @@ struct ListNode* newListNode(int iData)
 struct ListNode* insertNode(struct ListNode* ptrHead, int iData)
 {
     struct ListNode* newNode = newListNode(iData);
-    
+
+    // if the list is empty, return the ListNode.
     if (ptrHead == nullptr)
-    {
+    {   
         return newNode;
     }
-    
+
+    // if the node has no Next, add the newNode.
     if (ptrHead->ptrNext == nullptr)
-    {
+    {   
         newNode->ptrPrev = ptrHead;    
         ptrHead->ptrNext = newNode;
     }
     else
-    {
+    {   // use recursion, passing the ptrHead->ptrNext as ptrHead.
         ptrHead->ptrNext = insertNode(ptrHead->ptrNext, iData);
     }
-    
+     // return the ptrHead of the new list with the new node.
     return ptrHead;
 }
 
@@ -359,6 +364,7 @@ struct ListNode* insertNode(struct ListNode* ptrHead, int iData)
 void printList(struct ListNode* ptrHead)
 {
     struct ListNode* ptrCurrent = ptrHead;
+    // if the list is empty.    
     if (ptrCurrent == nullptr)
     {
         cout << "Empty List" << endl;
@@ -366,7 +372,8 @@ void printList(struct ListNode* ptrHead)
     else
     {
         while (ptrCurrent != nullptr)
-        {
+        {   
+            // traverse the list by printing the nodes.
             cout << ptrCurrent->iData << "\t";
             ptrCurrent = ptrCurrent->ptrNext;
         }        
@@ -386,19 +393,24 @@ void printList(struct ListNode* ptrHead)
  */
 struct ListNode* insertCurrentLevel(struct ListNode* ptrHead, struct TreeNode* ptrRoot, int iLevel)
 {
+    // if the level is empty
     if (ptrRoot == nullptr)
     {
         return ptrHead;    
     }
+    // if the level is the first 
     if (iLevel == 1)
-    {
+    {   
         ptrHead = insertNode(ptrHead, ptrRoot->iData);
     }
+    // if level is superior than 1
     else if (iLevel > 1) 
-    {
+    {   
         ptrHead = insertCurrentLevel(ptrHead, ptrRoot->ptrLeft, iLevel - 1);
         ptrHead = insertCurrentLevel(ptrHead, ptrRoot->ptrRight, iLevel - 1);
     }
+    
+    // return the ptrHead
     return ptrHead;
 }
 
@@ -411,13 +423,18 @@ struct ListNode* insertCurrentLevel(struct ListNode* ptrHead, struct TreeNode* p
  */
 struct ListNode* insertBFS(struct TreeNode* ptrRoot)
 {
+    // initialize th head of the list as nullptr.
     struct ListNode* ptrHead = nullptr;
-
+    
+    // get the depth of the binary tree.
     int iDepth = getHeight(ptrRoot);
     for (int iLevel = 0; iLevel < iDepth; iLevel++)
-    {
+    {   
+        // insert the nodes of the current level into the list. 
         ptrHead = insertCurrentLevel(ptrHead, ptrRoot, iLevel + 1);
     }
+
+    // return the head of the list.
     return ptrHead;
 }
 
@@ -430,13 +447,17 @@ struct ListNode* insertBFS(struct TreeNode* ptrRoot)
  */
 void traverseBFS(struct TreeNode* ptrRoot)
 {
+    // if the tree is empty.
     if (ptrRoot == nullptr)
     {
         cout << "Empty Tree" << endl;
     }
+
+    // get the depth of the tree.
     int iDepth = getHeight(ptrRoot);
     for (int iLevel = 0; iLevel < iDepth; iLevel++)
     {
+        // print the nodes of the current level.
         printCurrentLevel(ptrRoot, iLevel + 1);
         cout << endl;
     }   
@@ -451,15 +472,19 @@ void traverseBFS(struct TreeNode* ptrRoot)
  */
 int getLength(struct ListNode* ptrHead)
 {
+    // initialization.
     struct ListNode* ptrCurrent = ptrHead;
     int iLength = 1;
 
+    // traverse the list until reaching the end.
     while (ptrCurrent->ptrNext != nullptr)
     {
+        // tranverse the list count the elements.
         ptrCurrent = ptrCurrent->ptrNext;
         iLength++;
     }
 
+    // return the lenght of the list.
     return iLength;
 }
 
@@ -473,13 +498,15 @@ int getLength(struct ListNode* ptrHead)
  */
 struct ListNode* getNodeByIndex(struct ListNode* ptrHead, int iIndex)
 {
+    // inizialization.
     struct ListNode* ptrCurrent = ptrHead;
     
+    // go through the list until you find the index
     for (int i = 0; i < iIndex; i++)
     {
         ptrCurrent = ptrCurrent->ptrNext;
     }
-
+    // return the node of the index
     return ptrCurrent;
 }
 
@@ -493,16 +520,20 @@ struct ListNode* getNodeByIndex(struct ListNode* ptrHead, int iIndex)
  */
 void printCurrentLevel(struct TreeNode* ptrRoot, int iLevel)
 {
+    // if the node is empty return.
     if (ptrRoot == nullptr)
     {
         return;
     }
+    // if the node is the first.
     if (iLevel == 1)
-    {
+    {   
         cout << ptrRoot->iData << "\t";
     }
+    // if the level is greater than 1.
     else if (iLevel > 1) 
-    {
+    {   
+        // let's go down to the children, first to the left child, second to the right child. 
         printCurrentLevel(ptrRoot->ptrLeft, iLevel - 1);
         printCurrentLevel(ptrRoot->ptrRight, iLevel - 1);      
     }
@@ -524,23 +555,30 @@ void printCurrentLevel(struct TreeNode* ptrRoot, int iLevel)
  */
 void swapNodes(struct ListNode** ptrHead, struct ListNode* ptrNodeA, struct ListNode* ptrNodeB)
 {
+    // rearrange the nexts of node A, node B, node A prev, and node B prev, we also need to change the prevs of node A, node B, node A next, and node B next.
+    // if NodeA is the head.
     if (ptrNodeA == *ptrHead)
     {
+        // if ptrNodeA->ptrNext is the NodeB.
         if (ptrNodeA->ptrNext == ptrNodeB)
-        {
+        {   
             ptrNodeA->ptrNext = ptrNodeB->ptrNext;
+            // if NodeB is not the tail.
             if (ptrNodeB->ptrNext != nullptr) ptrNodeB->ptrNext->ptrPrev = ptrNodeA;
+            // if NodeB is the tail.
             ptrNodeA->ptrPrev = ptrNodeB;
             ptrNodeB->ptrNext = ptrNodeA;
             ptrNodeB->ptrPrev = nullptr;
-
             (*ptrHead) = ptrNodeB;
         }
+        // if ptrNodeA->ptrNext is not the NodeB.
         else
-        {
+        {   
+            // save the adjacent nodes of NodeB in the news ListNodes.
             struct ListNode* ptrCurrentBPrev = ptrNodeB->ptrPrev;
             struct ListNode* ptrCurrentBNext = ptrNodeB->ptrNext;
 
+            // rearrange nodes.
             ptrNodeB->ptrNext = ptrNodeA->ptrNext;
             ptrNodeB->ptrPrev = nullptr;
             ptrCurrentBPrev->ptrNext = ptrNodeA;
@@ -548,29 +586,35 @@ void swapNodes(struct ListNode** ptrHead, struct ListNode* ptrNodeA, struct List
             ptrNodeA->ptrNext->ptrPrev = ptrNodeB;
             ptrNodeA->ptrNext = ptrCurrentBNext;
             ptrNodeA->ptrPrev = ptrCurrentBPrev;
-
             (*ptrHead) = ptrNodeB;
         }
     }
+    // NodeA is not the head.
     else
     {
+        // if ptrNodeA->ptrNext is the NodeB.
         if (ptrNodeA->ptrNext == ptrNodeB)
-        {
+        {   
             ptrNodeA->ptrNext = ptrNodeB->ptrNext;
+            // if NodeB is not the tail. 
             if (ptrNodeB->ptrNext != nullptr) ptrNodeB->ptrNext->ptrPrev = ptrNodeA;
+            // if NodeB is the tail.
             ptrNodeB->ptrPrev = ptrNodeA->ptrPrev;
             ptrNodeA->ptrPrev->ptrNext = ptrNodeB;
             ptrNodeB->ptrNext = ptrNodeA;
             ptrNodeA->ptrPrev = ptrNodeB;
         }
+        // if ptrNodeA->ptrNext is not the NodeB.
         else
         {
+            // save the adjacent nodes of NodeB and Node A in the news ListNodes.
             struct ListNode* ptrCurrentAPrev = ptrNodeA->ptrPrev;
             struct ListNode* ptrCurrentBPrev = ptrNodeB->ptrPrev;
 
             struct ListNode* ptrCurrentANext = ptrNodeA->ptrNext;
             struct ListNode* ptrCurrentBNext = ptrNodeB->ptrNext;
-
+            
+            // rearrange the nodes prevs and nexts.
             ptrNodeA->ptrPrev = ptrNodeB->ptrPrev;
             ptrNodeB->ptrPrev = ptrCurrentAPrev;
 
@@ -581,6 +625,7 @@ void swapNodes(struct ListNode** ptrHead, struct ListNode* ptrNodeA, struct List
             ptrNodeB->ptrNext = ptrCurrentANext;
 
             ptrCurrentANext->ptrPrev = ptrNodeB;
+            // if NodeB is the tail.
             if (ptrCurrentBNext != nullptr) ptrCurrentBNext->ptrPrev = ptrNodeA;
         }
     }
@@ -595,25 +640,30 @@ void swapNodes(struct ListNode** ptrHead, struct ListNode* ptrNodeA, struct List
  */
 void selectionSort(struct ListNode** ptrHead)
 {
+    // initialization.
     struct ListNode* ptrCurrent = *ptrHead;
     int iLength = getLength(*ptrHead);
     
     for (int iIndex = 0; iIndex < iLength; iIndex++)
     {
+        // ptrCurrent receive the index node.
         ptrCurrent = getNodeByIndex(*ptrHead, iIndex);
+        // initialization, the "min" and "min candidate" being the current.
         struct ListNode* ptrMin = ptrCurrent;
         struct ListNode* ptrCandidate = ptrCurrent;
 
+        // traversing the successor nodes and comparing.
         while (ptrCandidate != nullptr)
         {
             if (ptrMin->iData > ptrCandidate->iData)
-            {
+            {   
+                // if candidate is smaller than min node, update the min node.
                 ptrMin = ptrCandidate;
             }
-
+            // just candidate update.
             ptrCandidate = ptrCandidate->ptrNext;
         }
-
+        //if there is a smaller than the current, change the current with the min.
         if (ptrMin != ptrCurrent)
         {
             swapNodes(ptrHead, ptrCurrent, ptrMin);
@@ -630,12 +680,15 @@ void selectionSort(struct ListNode** ptrHead)
  */
 void insertionSort(struct ListNode** ptrHead)
 {
+    // initialization.
     struct ListNode* ptrCurrent1 = *ptrHead;
     struct ListNode* ptrCurrent2 = *ptrHead;
     int iLength = getLength(ptrCurrent1);
 
+    // growing loop, ptrCurrent1 is the index Node iOuterLoop. 
     for (int iOuterLoop = 1; iOuterLoop < iLength; iOuterLoop++)
     {
+        // loop comparing with the previous ones and changing if there is a smaller one.
         for (int iInnerLoop = iOuterLoop; iInnerLoop > 0; iInnerLoop--)
         {
             ptrCurrent1 = getNodeByIndex(*ptrHead, iInnerLoop);
@@ -662,8 +715,9 @@ void shellSort(struct ListNode** ptrHead)
     int iLength = getLength(*ptrHead);
     int iGap = 1;
 
+    // Knuth's sequence
     while (iGap < iLength) iGap = 3 * iGap + 1;
-
+    // calculate the initial gap and updates the value of gap.
     for (iGap = (iGap - 1) / 3; iGap > 0; iGap = (iGap - 1) / 3)
     {
         for (int iOuterLoop = iGap; iOuterLoop < iLength; iOuterLoop++)
@@ -672,7 +726,7 @@ void shellSort(struct ListNode** ptrHead)
             {
                 ptrCurrent1 = getNodeByIndex(*ptrHead, iInnerLoop);
                 struct ListNode* ptrCurrent2 = getNodeByIndex(*ptrHead, iInnerLoop - iGap);
-
+                // comparisons between elements with distance gap
                 if (ptrCurrent1->iData < ptrCurrent2->iData)
                 {
                     swapNodes(ptrHead, ptrCurrent2, ptrCurrent1);
@@ -694,12 +748,13 @@ void bubbleSort(struct ListNode** ptrHead)
     struct ListNode* ptrRoot = *ptrHead;
     int iLength = getLength(*ptrHead);
     bool bUnordered = true;
-    
+    // loop to decrease where we left off the inner loop.
     for (int iOuterLoop = 0; iOuterLoop < iLength; iOuterLoop++)
     {
         bUnordered = false;
         for (int iInnerLoop = 0; iInnerLoop < iLength - 1 - iOuterLoop; iInnerLoop++)
-        {
+        {   
+            // comparing two by two and switching when necessary
             struct ListNode* ptrTempA = getNodeByIndex(*ptrHead, iInnerLoop);
             struct ListNode* ptrTempB = getNodeByIndex(*ptrHead, iInnerLoop + 1);
         
@@ -711,6 +766,7 @@ void bubbleSort(struct ListNode** ptrHead)
             }
             
         }
+        // if we do not perform any changes in a loop, we have our ordered list
         if (!bUnordered) break;
     }
 
@@ -1004,31 +1060,139 @@ void loop()
             
             case 11: // Exhibit the tree using BFS.
             {
-                cout << "Executing 11" << endl;
+                /******************************/
+                
+                // Start the timer
+                auto timeStart = high_resolution_clock::now();
+                
+                // Print the tree using BFS
+                traverseBFS(ptrRoot);
+                
+                // Stop the timer and compute the duration
+                auto timeStop = high_resolution_clock::now();
+                auto timeDuration = duration_cast<milliseconds>(timeStop - timeStart);
+                
+                /******************************/
+                
+                // Report the time taken to complete the operation
+                cout << "\nTask finnished in: " << timeDuration.count() << " milliseconds." << endl;
+                
                 break;
             }
             
             case 12: // Convert the tree to list and sort via Bubble Sort.
             {
-                cout << "Executing 12" << endl;
+                /******************************/
+                
+                // Start the timer
+                auto timeStart = high_resolution_clock::now();
+                
+                // Convert the tree to a doubly linked list using BFS
+                struct ListNode* ptrList = insertBFS(ptrRoot);
+                
+                // Sort the tree via Bubble Sort
+                bubbleSort(&ptrList);
+                
+                // Stop the timer and compute the duration
+                auto timeStop = high_resolution_clock::now();
+                auto timeDuration = duration_cast<milliseconds>(timeStop - timeStart);
+                
+                /******************************/
+                
+                // Print the sorted list
+                cout << "Sorted list:\n";
+                printList(ptrList);
+                
+                // Report the time taken to complete the operation
+                cout << "\nTask finnished in: " << timeDuration.count() << " milliseconds." << endl;
+                
                 break;
             }
             
             case 13: // Convert the tree to list and sort via Selection Sort.
             {
-                cout << "Executing 13" << endl;
+                /******************************/
+                
+                // Start the timer
+                auto timeStart = high_resolution_clock::now();
+                
+                // Convert the tree to a doubly linked list using BFS
+                struct ListNode* ptrList = insertBFS(ptrRoot);
+                
+                // Sort the tree via Selection Sort
+                selectionSort(&ptrList);
+                
+                // Stop the timer and compute the duration
+                auto timeStop = high_resolution_clock::now();
+                auto timeDuration = duration_cast<milliseconds>(timeStop - timeStart);
+                
+                /******************************/
+                
+                // Print the sorted list
+                cout << "Sorted list:\n";
+                printList(ptrList);
+                
+                // Report the time taken to complete the operation
+                cout << "\nTask finnished in: " << timeDuration.count() << " milliseconds." << endl;
+                
                 break;
             }
             
             case 14: // Convert the tree to list and sort via Insertion Sort.
             {
-                cout << "Executing 14" << endl;
+                /******************************/
+                
+                // Start the timer
+                auto timeStart = high_resolution_clock::now();
+                
+                // Convert the tree to a doubly linked list using BFS
+                struct ListNode* ptrList = insertBFS(ptrRoot);
+                
+                // Sort the tree via Insertion Sort
+                insertionSort(&ptrList);
+                
+                // Stop the timer and compute the duration
+                auto timeStop = high_resolution_clock::now();
+                auto timeDuration = duration_cast<milliseconds>(timeStop - timeStart);
+                
+                /******************************/
+                
+                // Print the sorted list
+                cout << "Sorted list:\n";
+                printList(ptrList);
+                
+                // Report the time taken to complete the operation
+                cout << "\nTask finnished in: " << timeDuration.count() << " milliseconds." << endl;
+                
                 break;
             }
             
             case 15: // Convert the tree to list and sort via Shell Sort.
             {
-                cout << "Executing 15" << endl;
+                /******************************/
+                
+                // Start the timer
+                auto timeStart = high_resolution_clock::now();
+                
+                // Convert the tree to a doubly linked list using BFS
+                struct ListNode* ptrList = insertBFS(ptrRoot);
+                
+                // Sort the tree via Shell Sort
+                shellSort(&ptrList);
+                
+                // Stop the timer and compute the duration
+                auto timeStop = high_resolution_clock::now();
+                auto timeDuration = duration_cast<milliseconds>(timeStop - timeStart);
+                
+                /******************************/
+                
+                // Print the sorted list
+                cout << "Sorted list:\n";
+                printList(ptrList);
+                
+                // Report the time taken to complete the operation
+                cout << "\nTask finnished in: " << timeDuration.count() << " milliseconds." << endl;
+                
                 break;
             }
             
