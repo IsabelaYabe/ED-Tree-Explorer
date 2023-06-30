@@ -1,6 +1,7 @@
 #include <iostream>
 #include <limits>
 #include <chrono>
+#include <thread>
 #include <fstream>
 #include "functions.h"
 #include "driver_code.h"
@@ -10,6 +11,7 @@ using std::endl;
 using std::cin;
 using std::string;
 using namespace std::chrono;
+using namespace std::this_thread;
 
 /***************************************************************************************************************************************/
 
@@ -839,7 +841,14 @@ void selectionSort(struct ListNode** ptrHead)
         if (ptrMin != ptrCurrent)
         {
             swapNodes(ptrHead, ptrCurrent, ptrMin);
+            
+            // Print the list vertically with a 0.5-second delay
+            printVertical(*ptrHead);
+            sleep_for(milliseconds(200));
+            system("clear");
         }
+        
+        
     }
 }
 
@@ -869,6 +878,11 @@ void insertionSort(struct ListNode** ptrHead)
             if (ptrCurrent1->iData < ptrCurrent2->iData)
             {
                 swapNodes(ptrHead, ptrCurrent2, ptrCurrent1);
+                
+                // Print the list vertically with a 0.5-second delay
+                printVertical(*ptrHead);
+                sleep_for(milliseconds(200));
+                system("clear");
             }
         }
     }
@@ -902,6 +916,11 @@ void shellSort(struct ListNode** ptrHead)
                 if (ptrCurrent1->iData < ptrCurrent2->iData)
                 {
                     swapNodes(ptrHead, ptrCurrent2, ptrCurrent1);
+                    
+                    // Print the list vertically with a 0.5-second delay
+                    printVertical(*ptrHead);
+                    sleep_for(milliseconds(200));
+                    system("clear");
                 }
             }
         }
@@ -929,19 +948,49 @@ void bubbleSort(struct ListNode** ptrHead)
             // comparing two by two and switching when necessary
             struct ListNode* ptrTempA = getNodeByIndex(*ptrHead, iInnerLoop);
             struct ListNode* ptrTempB = getNodeByIndex(*ptrHead, iInnerLoop + 1);
-        
             
             if (ptrTempA->iData > ptrTempB->iData)
             {
                 swapNodes(ptrHead, ptrTempA, ptrTempB);
                 bUnordered = true;
+                
+                // Print the list vertically with a 0.5-second delay
+                printVertical(*ptrHead);
+                sleep_for(milliseconds(200));
+                system("clear");
             }
             
         }
         // if we do not perform any changes in a loop, we have our ordered list
         if (!bUnordered) break;
     }
+}
 
+/**
+ * Prints a doubly linked list vertically with strings of 'O' characters representing each node
+ * 
+ * @param ptrHead A pointer to the pointer to the head of the linked list.
+ * 
+ * @return Void.
+ */
+void printVertical(struct ListNode* ptrHead) {
+    // If the head is nullptr, do nothing.
+    if (ptrHead == nullptr)
+    {
+        return;
+    }
+    
+    // Iterate over the list printing the payload and the corresponding quantity of "O" characters
+    for (struct ListNode* ptrTemp = ptrHead; ptrTemp != nullptr; ptrTemp = ptrTemp->ptrNext)
+    {
+        cout << ptrTemp->iData << "\t";
+        
+        for (int i = 0; i < ptrTemp->iData; i++)
+        {
+            cout << "O";
+        }
+        cout << endl;
+    }
 }
 
 /***************************************************************************************************************************************/
@@ -1272,6 +1321,7 @@ void loop()
                 /******************************/
                 
                 // Print the sorted list
+                printVertical(ptrList);
                 cout << "Sorted list:\n";
                 printList(ptrList);
                 
@@ -1301,6 +1351,7 @@ void loop()
                 /******************************/
                 
                 // Print the sorted list
+                printVertical(ptrList);
                 cout << "Sorted list:\n";
                 printList(ptrList);
                 
@@ -1330,6 +1381,7 @@ void loop()
                 /******************************/
                 
                 // Print the sorted list
+                printVertical(ptrList);
                 cout << "Sorted list:\n";
                 printList(ptrList);
                 
@@ -1359,6 +1411,7 @@ void loop()
                 /******************************/
                 
                 // Print the sorted list
+                printVertical(ptrList);
                 cout << "Sorted list:\n";
                 printList(ptrList);
                 
