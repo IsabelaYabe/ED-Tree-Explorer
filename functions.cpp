@@ -1004,31 +1004,139 @@ void loop()
             
             case 11: // Exhibit the tree using BFS.
             {
-                cout << "Executing 11" << endl;
+                /******************************/
+                
+                // Start the timer
+                auto timeStart = high_resolution_clock::now();
+                
+                // Print the tree using BFS
+                traverseBFS(ptrRoot);
+                
+                // Stop the timer and compute the duration
+                auto timeStop = high_resolution_clock::now();
+                auto timeDuration = duration_cast<milliseconds>(timeStop - timeStart);
+                
+                /******************************/
+                
+                // Report the time taken to complete the operation
+                cout << "\nTask finnished in: " << timeDuration.count() << " milliseconds." << endl;
+                
                 break;
             }
             
             case 12: // Convert the tree to list and sort via Bubble Sort.
             {
-                cout << "Executing 12" << endl;
+                /******************************/
+                
+                // Start the timer
+                auto timeStart = high_resolution_clock::now();
+                
+                // Convert the tree to a doubly linked list using BFS
+                struct ListNode* ptrList = insertBFS(ptrRoot);
+                
+                // Sort the tree via Bubble Sort
+                bubbleSort(&ptrList);
+                
+                // Stop the timer and compute the duration
+                auto timeStop = high_resolution_clock::now();
+                auto timeDuration = duration_cast<milliseconds>(timeStop - timeStart);
+                
+                /******************************/
+                
+                // Print the sorted list
+                cout << "Sorted list:\n";
+                printList(ptrList);
+                
+                // Report the time taken to complete the operation
+                cout << "\nTask finnished in: " << timeDuration.count() << " milliseconds." << endl;
+                
                 break;
             }
             
             case 13: // Convert the tree to list and sort via Selection Sort.
             {
-                cout << "Executing 13" << endl;
+                /******************************/
+                
+                // Start the timer
+                auto timeStart = high_resolution_clock::now();
+                
+                // Convert the tree to a doubly linked list using BFS
+                struct ListNode* ptrList = insertBFS(ptrRoot);
+                
+                // Sort the tree via Selection Sort
+                selectionSort(&ptrList);
+                
+                // Stop the timer and compute the duration
+                auto timeStop = high_resolution_clock::now();
+                auto timeDuration = duration_cast<milliseconds>(timeStop - timeStart);
+                
+                /******************************/
+                
+                // Print the sorted list
+                cout << "Sorted list:\n";
+                printList(ptrList);
+                
+                // Report the time taken to complete the operation
+                cout << "\nTask finnished in: " << timeDuration.count() << " milliseconds." << endl;
+                
                 break;
             }
             
             case 14: // Convert the tree to list and sort via Insertion Sort.
             {
-                cout << "Executing 14" << endl;
+                /******************************/
+                
+                // Start the timer
+                auto timeStart = high_resolution_clock::now();
+                
+                // Convert the tree to a doubly linked list using BFS
+                struct ListNode* ptrList = insertBFS(ptrRoot);
+                
+                // Sort the tree via Insertion Sort
+                insertionSort(&ptrList);
+                
+                // Stop the timer and compute the duration
+                auto timeStop = high_resolution_clock::now();
+                auto timeDuration = duration_cast<milliseconds>(timeStop - timeStart);
+                
+                /******************************/
+                
+                // Print the sorted list
+                cout << "Sorted list:\n";
+                printList(ptrList);
+                
+                // Report the time taken to complete the operation
+                cout << "\nTask finnished in: " << timeDuration.count() << " milliseconds." << endl;
+                
                 break;
             }
             
             case 15: // Convert the tree to list and sort via Shell Sort.
             {
-                cout << "Executing 15" << endl;
+                /******************************/
+                
+                // Start the timer
+                auto timeStart = high_resolution_clock::now();
+                
+                // Convert the tree to a doubly linked list using BFS
+                struct ListNode* ptrList = insertBFS(ptrRoot);
+                
+                // Sort the tree via Shell Sort
+                shellSort(&ptrList);
+                
+                // Stop the timer and compute the duration
+                auto timeStop = high_resolution_clock::now();
+                auto timeDuration = duration_cast<milliseconds>(timeStop - timeStart);
+                
+                /******************************/
+                
+                // Print the sorted list
+                cout << "Sorted list:\n";
+                printList(ptrList);
+                
+                // Report the time taken to complete the operation
+                cout << "\nTask finnished in: " << timeDuration.count() << " milliseconds." << endl;
+                
                 break;
             }
             
