@@ -348,6 +348,40 @@ void test()
     cout << "Print BFS tree: " << endl;
     traverseBFS(ptrRoot);
     cout << endl;
+
+    cout << "\n========== Testing efficientBFS() ==========" << endl;
+
+    cout << "Restarting tree..." << endl;
+    ptrRoot = nullptr;
+
+    cout << "Printing empty tree: " << endl;
+    efficientBFS(ptrRoot);
+
+    cout << "Adding elements 5, 3, 15, 2, 4, 7, 18" << endl;
+    insertNode(&ptrRoot, 5);
+    insertNode(&ptrRoot, 3);
+    insertNode(&ptrRoot, 15);
+    insertNode(&ptrRoot, 2);
+    insertNode(&ptrRoot, 4);
+    insertNode(&ptrRoot, 7);
+    insertNode(&ptrRoot, 18);
+
+    cout << "Printing tree: " << endl;
+    efficientBFS(ptrRoot);
+
+    cout << "Deleting 3" << endl;
+    ptrRoot = deleteNode(ptrRoot, 3);
+    efficientBFS(ptrRoot);
+
+    cout << "Deleting 7, 4" << endl;
+    ptrRoot = deleteNode(ptrRoot, 7);
+    ptrRoot = deleteNode(ptrRoot, 4);
+    efficientBFS(ptrRoot);
+
+    cout << "Deleting 5" << endl;
+    ptrRoot = deleteNode(ptrRoot, 5);
+    efficientBFS(ptrRoot);
+
     cout << "\n========== Testing getHeight() ==========" << endl;
     cout << "Depth of tree: " << endl;
     int iDepth = getHeight(ptrRoot);

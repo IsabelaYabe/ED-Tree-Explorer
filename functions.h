@@ -18,6 +18,20 @@ struct ListNode
   struct ListNode *ptrNext;
 };
 
+// This is a queue's Node
+struct QueueNode
+{
+  struct TreeNode* ptrTreeNode;
+  struct QueueNode* ptrNext;
+};
+
+// This is a queue
+struct Queue
+{
+  struct QueueNode* ptrFront;
+  struct QueueNode* ptrRear;
+};
+
 /***************************************************************************************************************************************/
 
 // Useful variables
@@ -52,9 +66,15 @@ const string strInstruction = "To choose an option, enter the corresponding numb
 
 struct TreeNode* newTreeNode(int);
 struct ListNode* newListNode(int);
+struct QueueNode* newQueueNode(struct TreeNode*);
+
+struct Queue* newQueue();
+void enQueue(struct Queue*, struct TreeNode*);
+struct TreeNode* deQueue(struct Queue*);
 
 void traversePreOrder(struct TreeNode*);
 void traverseBFS(struct TreeNode*);
+void efficientBFS(struct TreeNode*);
 
 void printList(struct ListNode*);
 void printCurrentLevel(struct TreeNode*, int);
@@ -73,6 +93,7 @@ struct TreeNode* deleteNode(struct TreeNode*, int);
 struct TreeNode* searchNode(struct TreeNode*, int);
 
 int getHeight(struct TreeNode*);
+int getNodeHeight(struct TreeNode*, struct TreeNode*);
 int getNumberOfNodes(struct TreeNode*);
 int getLength(struct ListNode*);
 
